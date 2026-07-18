@@ -103,6 +103,17 @@ const modalTitle = document.getElementById("modalTitle");
 const saveChildBtn = document.getElementById("saveChildBtn");
 const formError = document.getElementById("formError");
 
+// Points modal elements
+const pointsModalOverlay = document.getElementById("pointsModalOverlay");
+const closePointsModalBtn = document.getElementById("closePointsModalBtn");
+const pointsModalName = document.getElementById("pointsModalName");
+const pointsModalGrade = document.getElementById("pointsModalGrade");
+const pointsModalRank = document.getElementById("pointsModalRank");
+const pointsModalValue = document.getElementById("pointsModalValue");
+const pointsModalRingFill = document.querySelector(".ring-fill--large");
+const pointsModalAvatarInitials = document.querySelector(".avatar-initials--large");
+const pointsModalRankBadge = document.querySelector(".rank-badge--large");
+
 // Form fields
 const fieldName = document.getElementById("fieldName");
 const fieldDob = document.getElementById("fieldDob");
@@ -740,6 +751,16 @@ childGrid.addEventListener("click", (event) => {
     return;
   }
 
+  // Click on points display to open points modal
+  if (event.target.closest(".points-display") && !card.classList.contains("is-expanded")) {
+    openPointsModal(id, {
+      name: card.dataset.name || "",
+      grade: card.dataset.grade || "",
+      points: lastKnownPointsById.get(id) || 0,
+    });
+    return;
+  }
+
   // Click on card itself to expand (if not already expanded)
   if (!card.classList.contains("is-expanded")) {
     toggleCardExpand(card, true);
@@ -783,6 +804,7 @@ async function updateChildPoints(id, amount, action = "add") {
 // Track the currently expanded card
 let expandedCardId = null;
 const expandOverlay = document.getElementById("expandOverlay");
+const appContainer = document.querySelector(".app");
 
 function toggleCardExpand(card, expand) {
   const id = card.dataset.id;
@@ -792,13 +814,18 @@ function toggleCardExpand(card, expand) {
     if (expandedCardId && expandedCardId !== id) {
       const prevCard = cardElementsById.get(expandedCardId);
       if (prevCard) {
-        prevCard.classList.remove("is-expanded");
+        toggleCardExpand(prevCard, false);
       }
     }
     
     // Expand this card
     card.classList.add("is-expanded");
     expandedCardId = id;
+    
+    // Blur the background
+    if (appContainer) {
+      appContainer.classList.add("blur-when-expanded");
+    }
     
     // Show the overlay
     if (expandOverlay) {
@@ -809,6 +836,11 @@ function toggleCardExpand(card, expand) {
     card.classList.remove("is-expanded");
     if (expandedCardId === id) {
       expandedCardId = null;
+    }
+    
+    // Remove blur from background
+    if (appContainer) {
+      appContainer.classList.remove("blur-when-expanded");
     }
     
     // Hide the overlay
@@ -826,6 +858,121 @@ if (expandOverlay) {
       if (card) {
         toggleCardExpand(card, false);
       }
+    }
+  });
+}
+
+/* ==========================================================================
+   POINTS EDIT MODAL
+   ========================================================================== */
+let pointsModalChildId = null;
+
+function openPointsModal(id, data) {
+  pointsModalChildId = id;
+  
+  // Update modal content
+  if (pointsModalName) pointsModalName.textContent = data.name || "Unnamed";
+  if (pointsModalGrade) pointsModalGrade.textContent = data.grade || "No grade set";
+  
+  const points = data.points || 0;
+  const tier = getTier(points);
+  const progress = getRingProgress(points, tier);
+  
+  if (pointsModalRank) {
+    pointsModalRank.textContent = tier.name;
+  }
+  
+  if (pointsModalValue) {
+    pointsModalValue.textContent = points;
+  }
+  
+  if (pointsModalAvatarInitials) {
+    pointsModalAvatarInitials.textContent = getInitials(data.name || "?");
+  }
+  
+  if (pointsModalRankBadge) {
+    pointsModalRankBadge.textContent = tier.emoji;
+    pointsModalRankBadge.title = tier.name;
+  }
+  
+  if (pointsModalRingFill) {
+    pointsModalRingFill.style.strokeDashoffset = String(RING_CIRCUMFERENCE * (1 - progress));
+    pointsModalRingFill.style.stroke = tier.color;
+  }
+  
+  // Blur the background
+  if (appContainer) {
+    appContainer.classList.add("blur-when-expanded");
+  }
+  
+  if (pointsModalOverlay) {
+    pointsModalOverlay.classList.remove("hidden");
+  }
+}
+
+function closePointsModal() {
+  pointsModalChildId = null;
+  if (appContainer) {
+    appContainer.classList.remove("blur-when-expanded");
+  }
+  if (pointsModalOverlay) {
+    pointsModalOverlay.classList.add("hidden");
+  }
+}
+
+// Points modal event handlers
+if (closePointsModalBtn) {
+  closePointsModalBtn.addEventListener("click", closePointsModal);
+}
+
+if (pointsModalOverlay) {
+  pointsModalOverlay.addEventListener("click", (event) => {
+    if (event.target === pointsModalOverlay) closePointsModal();
+  });
+}
+
+// Points modal point buttons
+if (pointsModalOverlay) {
+  pointsModalOverlay.addEventListener("click", (event) => {
+    const pointButton = event.target.closest(".btn-point:not(.btn-point--custom)");
+    if (pointButton && pointsModalChildId) {
+      const amount = Number(pointButton.dataset.amount);
+      const action = pointButton.dataset.action || "add";
+      updateChildPoints(pointsModalChildId, amount, action);
+    }
+  });
+  
+  pointsModalOverlay.addEventListener("submit", (event) => {
+    const form = event.target.closest(".custom-point-form--large");
+    if (!form || !pointsModalChildId) return;
+    event.preventDefault();
+    
+    const input = form.querySelector(".custom-point-input--large");
+    const amount = Number(input?.value);
+    
+    if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
+      input?.focus();
+      return;
+    }
+    
+    updateChildPoints(pointsModalChildId, amount, "add");
+    input.value = "";
+  });
+  
+  pointsModalOverlay.addEventListener("click", (event) => {
+    const removeCustomBtn = event.target.closest(".btn-point--custom.btn-point--remove");
+    if (removeCustomBtn && pointsModalChildId) {
+      const form = removeCustomBtn.closest(".custom-point-form--large");
+      const input = form?.querySelector(".custom-point-input--large");
+      const amount = Number(input?.value);
+      
+      if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
+        input?.focus();
+        return;
+      }
+      
+      updateChildPoints(pointsModalChildId, amount, "remove");
+      input.value = "";
     }
   });
 }
