@@ -506,7 +506,14 @@ function openAddModal() {
   childForm.reset();
   formError.classList.add("hidden");
   childModalOverlay.classList.remove("hidden");
+  document.body.classList.add("modal-open");
   fieldName.focus();
+}
+
+function closeChildModal() {
+  childModalOverlay.classList.add("hidden");
+  document.body.classList.remove("modal-open");
+  editingChildId = null;
 }
 
 function openEditModal(id, data) {
@@ -536,12 +543,8 @@ function openEditModal(id, data) {
   fieldNotes.value = data.notes || "";
   formError.classList.add("hidden");
   childModalOverlay.classList.remove("hidden");
+  document.body.classList.add("modal-open");
   fieldName.focus();
-}
-
-function closeChildModal() {
-  childModalOverlay.classList.add("hidden");
-  editingChildId = null;
 }
 
 if (themeToggleBtn) {
