@@ -903,11 +903,7 @@ function openPointsModal(id, data) {
     pointsModalRingFill.style.stroke = tier.color;
   }
   
-  // Blur the background
-  if (appContainer) {
-    appContainer.classList.add("blur-when-expanded");
-  }
-  
+  // Show the modal (backdrop-filter on overlay handles the blur)
   if (pointsModalOverlay) {
     pointsModalOverlay.classList.remove("hidden");
   }
@@ -915,9 +911,6 @@ function openPointsModal(id, data) {
 
 function closePointsModal() {
   pointsModalChildId = null;
-  if (appContainer) {
-    appContainer.classList.remove("blur-when-expanded");
-  }
   if (pointsModalOverlay) {
     pointsModalOverlay.classList.add("hidden");
   }
