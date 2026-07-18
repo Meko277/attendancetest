@@ -465,11 +465,10 @@ body.dark .rank-name {
   max-height: 90vh !important;
 }
 
-/* Blur background when card is expanded - blur the entire app */
+/* Blur background when card is expanded - use overlay backdrop-filter instead */
 .app.blur-when-expanded {
-  filter: blur(4px);
   opacity: 0.6;
-  transition: filter 0.3s ease, opacity 0.3s ease;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
@@ -477,7 +476,6 @@ body.dark .rank-name {
 .child-card.is-expanded,
 .modal-overlay,
 .points-modal-card {
-  filter: none !important;
   opacity: 1 !important;
   pointer-events: auto !important;
 }
