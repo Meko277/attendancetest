@@ -450,7 +450,7 @@ body.dark .rank-name {
   transform: translate(-50%, -50%) scale(1) !important;
   z-index: 1000 !important;
   width: 95vw !important;
-  max-width: 500px !important;
+  max-width: 600px !important;
   max-height: 95vh !important;
   box-shadow: 0 25px 60px rgba(45, 49, 66, 0.3) !important;
   animation: card-expand 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
