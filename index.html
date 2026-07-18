@@ -44,6 +44,12 @@
         </div>
 
         <div class="topbar-actions">
+          <div class="grade-filter">
+            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="all">All</button>
+            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="4th grade">4th</button>
+            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="5th grade">5th</button>
+            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="6th grade">6th</button>
+          </div>
           <div class="search-container">
             <input
               type="text"
@@ -114,7 +120,12 @@
 
           <label class="field">
             <span>Grade</span>
-            <input type="text" id="fieldGrade" placeholder="e.g. Grade 5" />
+            <select id="fieldGrade">
+              <option value="">Select grade</option>
+              <option value="4th grade">4th grade</option>
+              <option value="5th grade">5th grade</option>
+              <option value="6th grade">6th grade</option>
+            </select>
           </label>
 
           <label class="field">
@@ -251,53 +262,53 @@
       </div>
     </div>
 
-<!-- Toast notification for quick feedback (e.g. "Points added!") -->
-     <div id="toast" class="toast hidden"></div>
+    <!-- Toast notification for quick feedback (e.g. "Points added!") -->
+    <div id="toast" class="toast hidden"></div>
 
-     <!-- ============ POINTS EDIT MODAL ============ -->
-     <div id="pointsModalOverlay" class="modal-overlay hidden">
-       <div class="modal-card points-modal-card">
-         <button type="button" id="closePointsModalBtn" class="btn btn-ghost points-modal-close" title="Close">
-           ✕
-         </button>
-         <div class="points-modal-content">
-           <div class="points-modal-avatar">
-             <svg class="ring ring--large" viewBox="0 0 120 120" aria-hidden="true">
-               <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
-               <circle class="ring-fill ring-fill--large" cx="60" cy="60" r="52"></circle>
-             </svg>
-             <div class="avatar avatar--large"><span class="avatar-initials avatar-initials--large"></span></div>
-             <div class="rank-badge rank-badge--large" title=""></div>
-           </div>
-           <h2 id="pointsModalName" class="points-modal-name"></h2>
-           <p id="pointsModalGrade" class="points-modal-grade"></p>
-           <p id="pointsModalRank" class="points-modal-rank"></p>
-           
-           <div class="points-display points-display--large">
-             <span id="pointsModalValue" class="points-number points-number--large" data-points="0">0</span>
-             <span class="points-label points-label--large">points</span>
-           </div>
-           
-           <div class="point-controls point-controls--large">
-             <div class="quick-buttons quick-buttons--large">
-               <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="5">−5</button>
-               <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="10">−10</button>
-               <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="50">−50</button>
-               <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="5">+5</button>
-               <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="10">+10</button>
-               <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="50">+50</button>
-             </div>
-             <form class="custom-point-form custom-point-form--large">
-               <input type="number" class="custom-point-input custom-point-input--large" placeholder="Custom amount" aria-label="Custom point amount" />
-               <div class="custom-point-actions custom-point-actions--large">
-                 <button type="submit" class="btn-point btn-point--custom btn-point--add btn-point--large">Add</button>
-                 <button type="button" class="btn-point btn-point--custom btn-point--remove btn-point--large" data-action="remove">Remove</button>
-               </div>
-             </form>
-           </div>
-         </div>
-       </div>
-     </div>
+    <!-- ============ POINTS EDIT MODAL ============ -->
+    <div id="pointsModalOverlay" class="modal-overlay hidden">
+      <div class="modal-card points-modal-card">
+        <button type="button" id="closePointsModalBtn" class="btn btn-ghost points-modal-close" title="Close">
+          ✕
+        </button>
+        <div class="points-modal-content">
+          <div class="points-modal-avatar">
+            <svg class="ring ring--large" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+              <circle class="ring-fill ring-fill--large" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <div class="avatar avatar--large"><span class="avatar-initials avatar-initials--large"></span></div>
+            <div class="rank-badge rank-badge--large" title=""></div>
+          </div>
+          <h2 id="pointsModalName" class="points-modal-name"></h2>
+          <p id="pointsModalGrade" class="points-modal-grade"></p>
+          <p id="pointsModalRank" class="points-modal-rank"></p>
+          
+          <div class="points-display points-display--large">
+            <span id="pointsModalValue" class="points-number points-number--large" data-points="0">0</span>
+            <span class="points-label points-label--large">points</span>
+          </div>
+          
+          <div class="point-controls point-controls--large">
+            <div class="quick-buttons quick-buttons--large">
+              <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="5">−5</button>
+              <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="10">−10</button>
+              <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="50">−50</button>
+              <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="5">+5</button>
+              <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="10">+10</button>
+              <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="50">+50</button>
+            </div>
+            <form class="custom-point-form custom-point-form--large">
+              <input type="number" class="custom-point-input custom-point-input--large" placeholder="Custom amount" aria-label="Custom point amount" />
+              <div class="custom-point-actions custom-point-actions--large">
+                <button type="submit" class="btn-point btn-point--custom btn-point--add btn-point--large">Add</button>
+                <button type="button" class="btn-point btn-point--custom btn-point--remove btn-point--large" data-action="remove">Remove</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Card template used by app.js to stamp out each child -->
     <template id="childCardTemplate">
