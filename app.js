@@ -189,7 +189,32 @@ let deletingChildId = null;
 // Search query
 let searchQuery = "";
 
+// Grade filter
+let gradeFilter = "all";
+
+// Store all children data for sorting
+const childrenDataById = new Map();
+
 initTheme();
+
+// Grade filter event handlers
+const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
+gradeFilterButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // Update active state
+    gradeFilterButtons.forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    
+    // Set the filter
+    gradeFilter = btn.dataset.grade;
+    
+    // Apply filters
+    filterChildren();
+  });
+});
+
+// Set "All" as active by default
+document.querySelector('.grade-filter-btn[data-grade="all"]')?.classList.add("is-active");
 
 /* ==========================================================================
    RENDERING HELPERS
@@ -290,7 +315,7 @@ function updateEmptyState() {
 }
 
 /* ==========================================================================
-   SEARCH FUNCTIONALITY
+   SEARCH & FILTER FUNCTIONALITY
    ========================================================================== */
 function filterChildren() {
   const query = searchQuery.toLowerCase().trim();
@@ -300,8 +325,14 @@ function filterChildren() {
     const school = (card.dataset.school || "").toLowerCase();
     const talent = (card.dataset.talent || "").toLowerCase();
     
-    const matches = name.includes(query) || grade.includes(query) || school.includes(query) || talent.includes(query);
-    card.classList.toggle("hidden", !matches);
+    // Check search query match
+    const matchesQuery = name.includes(query) || grade.includes(query) || school.includes(query) || talent.includes(query);
+    
+    // Check grade filter match
+    const matchesGrade = gradeFilter === "all" || card.dataset.grade === gradeFilter;
+    
+    // Show card only if both filters pass
+    card.classList.toggle("hidden", !(matchesQuery && matchesGrade));
   });
 }
 
@@ -428,6 +459,22 @@ function applyCardData(card, data, { isNew = false } = {}) {
 }
 
 /* ==========================================================================
+   SORTING HELPER
+   ========================================================================== */
+function sortCardsByPoints() {
+  // Get all cards and sort by points (highest first)
+  const cards = Array.from(childGrid.querySelectorAll(".child-card"));
+  cards.sort((a, b) => {
+    const pointsA = Number(a.querySelector(".points-number")?.textContent || 0);
+    const pointsB = Number(b.querySelector(".points-number")?.textContent || 0);
+    return pointsB - pointsA; // Descending order (highest first)
+  });
+  
+  // Re-append cards in sorted order
+  cards.forEach(card => childGrid.appendChild(card));
+}
+
+/* ==========================================================================
    FIRESTORE REAL-TIME LISTENER
    docChanges() tells us precisely which children were added, modified, or
    removed since the last update — that's what lets us animate in place
@@ -473,6 +520,9 @@ onSnapshot(
       }
     });
 
+    // Sort cards by points (highest first)
+    sortCardsByPoints();
+    
     updateEmptyState();
     filterChildren(); // Apply search filter after updates
   },
@@ -821,6 +871,26 @@ function toggleCardExpand(card, expand) {
       }
     }
     
+    // Get the card's original position and dimensions
+    const rect = card.getBoundingClientRect();
+    const startX = rect.left;
+    const startY = rect.top;
+    const startWidth = rect.width;
+    const startHeight = rect.height;
+    
+    // Set initial position for animation
+    card.style.top = startY + "px";
+    card.style.left = startX + "px";
+    card.style.width = startWidth + "px";
+    card.style.height = startHeight + "px";
+    card.style.margin = "0";
+    
+    // Add expanding class to trigger animation
+    card.classList.add("is-expanding");
+    
+    // Force reflow
+    void card.offsetWidth;
+    
     // Expand this card
     card.classList.add("is-expanded");
     expandedCardId = id;
@@ -837,6 +907,7 @@ function toggleCardExpand(card, expand) {
   } else {
     // Collapse this card
     card.classList.remove("is-expanded");
+    card.classList.remove("is-expanding");
     if (expandedCardId === id) {
       expandedCardId = null;
     }
