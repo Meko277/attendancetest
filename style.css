@@ -466,15 +466,20 @@ body.dark .rank-name {
 }
 
 /* Blur background when card is expanded - blur the entire app */
-.child-card.is-expanded {
-  filter: none;
-}
-
 .app.blur-when-expanded {
   filter: blur(4px);
   opacity: 0.6;
   transition: filter 0.3s ease, opacity 0.3s ease;
   pointer-events: none;
+}
+
+/* Ensure expanded card and modals are not blurred */
+.child-card.is-expanded,
+.modal-overlay,
+.points-modal-card {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 @keyframes card-expand {
@@ -1250,6 +1255,14 @@ body.dark .detail-row {
   max-height: 60vh;
   overflow-y: auto;
   padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
 
 /* Scrollbar styling for webkit */
