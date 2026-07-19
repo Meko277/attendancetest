@@ -768,9 +768,13 @@ childGrid.addEventListener("click", (event) => {
     return;
   }
 
-  // Edit button: read the child's current data straight off the card's
-  // dataset (stashed there in applyCardData) to avoid a second Firestore read.
+  // Edit button: first expand the card to show all details, then open the edit modal
   if (event.target.closest(".edit-btn")) {
+    // Expand the card first to show all details
+    if (!card.classList.contains("is-expanded")) {
+      toggleCardExpand(card, true);
+    }
+    // Then open the edit modal
     openEditModal(id, {
       name: card.dataset.name || "",
       dob: card.dataset.dob || "",
