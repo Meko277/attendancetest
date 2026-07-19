@@ -491,6 +491,19 @@ body.dark .rank-name {
   max-height: 90vh !important;
 }
 
+/* Show all content in expanded view (name, grade, meta, points, and details) */
+.child-card.is-expanded .child-name,
+.child-card.is-expanded .child-grade,
+.child-card.is-expanded .child-meta,
+.child-card.is-expanded .rank-name,
+.child-card.is-expanded .points-display {
+  display: block !important;
+}
+
+.child-card.is-expanded .points-display {
+  display: flex !important;
+}
+
 /* When card is expanded, disable pointer events on the app to prevent interaction */
 .app.blur-when-expanded {
   pointer-events: none;
