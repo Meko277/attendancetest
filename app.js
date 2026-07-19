@@ -883,8 +883,8 @@ function toggleCardExpand(card, expand) {
     const startHeight = rect.height;
     
     // Set initial position for animation
-    card.style.top = startY + "px";
-    card.style.left = startX + "px";
+    card.style.top = startX + "px";
+    card.style.left = startY + "px";
     card.style.width = startWidth + "px";
     card.style.height = startHeight + "px";
     card.style.margin = "0";
@@ -915,6 +915,14 @@ function toggleCardExpand(card, expand) {
     if (expandedCardId === id) {
       expandedCardId = null;
     }
+    
+    // Reset inline styles to return to original position
+    card.style.top = "";
+    card.style.left = "";
+    card.style.width = "";
+    card.style.height = "";
+    card.style.margin = "";
+    card.style.transform = "";
     
     // Remove blur from background
     if (appContainer) {
