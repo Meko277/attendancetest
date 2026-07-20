@@ -48,7 +48,20 @@ try {
   console.log("Firebase initialized successfully");
 } catch (error) {
   console.error("Firebase initialization error:", error);
+  // Show error on page
+  window.addEventListener("DOMContentLoaded", () => {
+    const errorEl = document.getElementById("configError");
+    if (errorEl) {
+      errorEl.classList.remove("hidden");
+      errorEl.querySelector("p").textContent = "Firebase initialization failed: " + error.message;
+    }
+  });
 }
+
+// Global error handler
+window.addEventListener("error", (event) => {
+  console.error("Global error:", event.error);
+});
 
 /* ==========================================================================
    RANK / TIER SYSTEM
@@ -551,13 +564,259 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
+  // Add child button event handlers
+  if (openAddModalBtn) {
+    openAddModalBtn.addEventListener("click", openAddModal);
+  }
+  if (emptyStateAddBtn) {
+    emptyStateAddBtn.addEventListener("click", openAddModal);
+  }
+  
+  // Modal event handlers
+  if (cancelModalBtn) {
+    cancelModalBtn.addEventListener("click", closeChildModal);
+  }
+  if (childModalOverlay) {
+    childModalOverlay.addEventListener("click", (event) => {
+      if (event.target === childModalOverlay) closeChildModal();
+    });
+  }
+  
+  // Delete modal event handlers
+  if (cancelDeleteBtn) {
+    cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+  }
+  if (deleteModalOverlay) {
+    deleteModalOverlay.addEventListener("click", (event) => {
+      if (event.target === deleteModalOverlay) closeDeleteModal();
+    });
+  }
+  
+  // Form submit handler
+  if (childForm) {
+    childForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = fieldName.value.trim();
+      const dob = fieldDob.value;
+      const grade = fieldGrade.value.trim();
+      const address = fieldAddress.value.trim();
+      const phone = fieldPhone.value.trim();
+      const motherPhone = fieldMotherPhone.value.trim();
+      const school = fieldSchool.value.trim();
+      const talent = fieldTalent.value.trim();
+      const fatherConfession = fieldFatherConfession.value;
+      const inScout = fieldInScout.value;
+      const fatherJob = fieldFatherJob.value.trim();
+      const fatherPhone = fieldFatherPhone.value.trim();
+      const fatherFatherConfession = fieldFatherFatherConfession.value;
+      const church = fieldChurch.value.trim();
+      const motherName = fieldMotherName.value.trim();
+      const motherJob = fieldMotherJob.value.trim();
+      const motherFatherConfession = fieldMotherFatherConfession.value;
+      const siblingsCount = fieldSiblingsCount.value;
+      const siblingsNames = fieldSiblingsNames.value.trim();
+      const siblingsDob = fieldSiblingsDob.value.trim();
+      const notes = fieldNotes.value.trim();
+
+      // The `required` attribute on the inputs prevents most invalid states, but this is a good safeguard.
+      if (!name || !dob) {
+        formError.textContent = "Please fill in a valid name and date of birth.";
+        formError.classList.remove("hidden");
+        return;
+      }
+
+      saveChildBtn.disabled = true;
+      try {
+        if (editingChildId) {
+          // Editing an existing child: keep their points untouched, update the rest
+          await updateDoc(doc(db, "children", editingChildId), {
+            name, dob, grade, address, phone, motherPhone, school, talent,
+            fatherConfession, inScout, fatherJob, fatherPhone, fatherFatherConfession,
+            church, motherName, motherJob, motherFatherConfession, siblingsCount,
+            siblingsNames, siblingsDob, notes
+          });
+          showToast(`${name}'s details were updated`);
+        } else {
+          // Adding a brand-new child, starting at 0 points
+          await addDoc(childrenCollection, {
+            name, dob, grade, address, phone, motherPhone, school, talent,
+            fatherConfession, inScout, fatherJob, fatherPhone, fatherFatherConfession,
+            church, motherName, motherJob, motherFatherConfession, siblingsCount,
+            siblingsNames, siblingsDob, notes,
+            points: 0,
+            createdAt: serverTimestamp(),
+          });
+          showToast(`${name} was added to the board 🎉`);
+        }
+        closeChildModal();
+      } catch (error) {
+        console.error("Error saving child:", error);
+        formError.textContent =
+          "Something went wrong saving that child. Please try again.";
+        formError.classList.remove("hidden");
+      } finally {
+        saveChildBtn.disabled = false;
+      }
+    });
+  }
+  
+  // Card click event delegation
+  if (childGrid) {
+    childGrid.addEventListener("click", (event) => {
+      const card = event.target.closest(".child-card");
+      if (!card) return;
+      const id = card.dataset.id;
+
+      // If clicking on the collapse button or outside the expanded content, close
+      if (event.target.closest(".collapse-btn")) {
+        toggleCardExpand(card, false);
+        return;
+      }
+
+      // If card is already expanded and clicking on the overlay background, close it
+      if (card.classList.contains("is-expanded") && !event.target.closest(".child-details") && !event.target.closest(".point-controls") && !event.target.closest(".card-top-actions")) {
+        toggleCardExpand(card, false);
+        return;
+      }
+
+      const pointButton = event.target.closest(
+        ".btn-point:not(.btn-point--custom)",
+      );
+      if (pointButton) {
+        const amount = Number(pointButton.dataset.amount);
+        const action = pointButton.dataset.action || "add";
+        updateChildPoints(id, amount, action);
+        return;
+      }
+
+      const removeCustomBtn = event.target.closest(
+        ".btn-point--custom.btn-point--remove",
+      );
+      if (removeCustomBtn) {
+        const form = removeCustomBtn.closest(".custom-point-form");
+        const input = form?.querySelector(".custom-point-input");
+        const amount = Number(input?.value);
+        if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
+          input?.focus();
+          return;
+        }
+        updateChildPoints(id, amount, "remove");
+        input.value = "";
+        return;
+      }
+
+      // Expand/Collapse button
+      if (event.target.closest(".expand-btn")) {
+        toggleCardExpand(card, true);
+        return;
+      }
+
+      // Edit button: first expand the card to show all details, then open the edit modal
+      if (event.target.closest(".edit-btn")) {
+        // Expand the card first to show all details
+        if (!card.classList.contains("is-expanded")) {
+          toggleCardExpand(card, true);
+        }
+        // Then open the edit modal
+        openEditModal(id, {
+          name: card.dataset.name || "",
+          dob: card.dataset.dob || "",
+          grade: card.dataset.grade || "",
+          address: card.dataset.address || "",
+          phone: card.dataset.phone || "",
+          motherPhone: card.dataset.motherPhone || "",
+          school: card.dataset.school || "",
+          talent: card.dataset.talent || "",
+          fatherConfession: card.dataset.fatherConfession || "no",
+          inScout: card.dataset.inScout || "no",
+          fatherJob: card.dataset.fatherJob || "",
+          fatherPhone: card.dataset.fatherPhone || "",
+          fatherFatherConfession: card.dataset.fatherFatherConfession || "no",
+          church: card.dataset.church || "",
+          motherName: card.dataset.motherName || "",
+          motherJob: card.dataset.motherJob || "",
+          motherFatherConfession: card.dataset.motherFatherConfession || "no",
+          siblingsCount: card.dataset.siblingsCount || "",
+          siblingsNames: card.dataset.siblingsNames || "",
+          siblingsDob: card.dataset.siblingsDob || "",
+          notes: card.dataset.notes || "",
+        });
+        return;
+      }
+
+      // Delete button
+      if (event.target.closest(".delete-btn")) {
+        const name = card.querySelector(".child-name").textContent;
+        openDeleteModal(id, name);
+        return;
+      }
+
+      // Click on points display to open points modal
+      if (event.target.closest(".points-display") && !card.classList.contains("is-expanded")) {
+        openPointsModal(id, {
+          name: card.dataset.name || "",
+          grade: card.dataset.grade || "",
+          points: lastKnownPointsById.get(id) || 0,
+        });
+        return;
+      }
+
+      // Click on card itself to expand (if not already expanded)
+      if (!card.classList.contains("is-expanded")) {
+        toggleCardExpand(card, true);
+      }
+    });
+
+    // Custom point amount form (submit via Enter key or the "Add" button)
+    childGrid.addEventListener("submit", (event) => {
+      const form = event.target.closest(".custom-point-form");
+      if (!form) return;
+      event.preventDefault();
+
+      const card = form.closest(".child-card");
+      const input = form.querySelector(".custom-point-input");
+      const amount = Number(input.value);
+
+      if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+        input.focus();
+        return;
+      }
+
+      updateChildPoints(card.dataset.id, amount, "add");
+      input.value = "";
+    });
+  }
+  
   // Start Firestore listener after DOM is ready
   startFirestoreListener();
 });
 
+// Async function to update child points
+async function updateChildPoints(id, amount, action = "add") {
+  const delta = action === "remove" ? -Math.abs(amount) : Math.abs(amount);
+  try {
+    // Firestore's increment() applies the change atomically on the server,
+    // so simultaneous taps from a phone and a PC never overwrite each other.
+    await updateDoc(doc(db, "children", id), { points: increment(delta) });
+  } catch (error) {
+    console.error("Error updating points:", error);
+    showToast("Couldn't update points — please try again.");
+  }
+}
+
 // Firestore real-time listener
 function startFirestoreListener() {
   console.log("Starting Firestore listener...");
+  
+  // Check if Firebase is initialized
+  if (!db || !childrenCollection) {
+    console.error("Firebase not initialized - check your config");
+    setConnectionStatus("error");
+    showToast("Firebase not configured. Check app.js for errors.");
+    return;
+  }
+  
   onSnapshot(
     childrenCollection,
     (snapshot) => {
@@ -607,6 +866,7 @@ function startFirestoreListener() {
     (error) => {
       console.error("Firestore listener error:", error);
       setConnectionStatus("error");
+      showToast("Connection failed. Check Firebase config and database rules.");
     },
   );
 }
@@ -1019,87 +1279,12 @@ function openEditModal(id, data) {
   fieldSiblingsCount.value = data.siblingsCount || "";
   fieldSiblingsNames.value = data.siblingsNames || "";
   fieldSiblingsDob.value = data.siblingsDob || "";
-fieldNotes.value = data.notes || "";
+  fieldNotes.value = data.notes || "";
   formError.classList.add("hidden");
   childModalOverlay.classList.remove("hidden");
   document.body.classList.add("modal-open");
   fieldName.focus();
 }
-
-openAddModalBtn.addEventListener("click", openAddModal);
-emptyStateAddBtn.addEventListener("click", openAddModal);
-cancelModalBtn.addEventListener("click", closeChildModal);
-
-// Clicking the dark overlay (but not the card itself) closes the modal
-childModalOverlay.addEventListener("click", (event) => {
-  if (event.target === childModalOverlay) closeChildModal();
-});
-
-childForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const name = fieldName.value.trim();
-  const dob = fieldDob.value;
-  const grade = fieldGrade.value.trim();
-  const address = fieldAddress.value.trim();
-  const phone = fieldPhone.value.trim();
-  const motherPhone = fieldMotherPhone.value.trim();
-  const school = fieldSchool.value.trim();
-  const talent = fieldTalent.value.trim();
-  const fatherConfession = fieldFatherConfession.value;
-  const inScout = fieldInScout.value;
-  const fatherJob = fieldFatherJob.value.trim();
-  const fatherPhone = fieldFatherPhone.value.trim();
-  const fatherFatherConfession = fieldFatherFatherConfession.value;
-  const church = fieldChurch.value.trim();
-  const motherName = fieldMotherName.value.trim();
-  const motherJob = fieldMotherJob.value.trim();
-  const motherFatherConfession = fieldMotherFatherConfession.value;
-  const siblingsCount = fieldSiblingsCount.value;
-  const siblingsNames = fieldSiblingsNames.value.trim();
-  const siblingsDob = fieldSiblingsDob.value.trim();
-  const notes = fieldNotes.value.trim();
-
-  // The `required` attribute on the inputs prevents most invalid states, but this is a good safeguard.
-  if (!name || !dob) {
-    formError.textContent = "Please fill in a valid name and date of birth.";
-    formError.classList.remove("hidden");
-    return;
-  }
-
-  saveChildBtn.disabled = true;
-  try {
-    if (editingChildId) {
-      // Editing an existing child: keep their points untouched, update the rest
-      await updateDoc(doc(db, "children", editingChildId), {
-        name, dob, grade, address, phone, motherPhone, school, talent,
-        fatherConfession, inScout, fatherJob, fatherPhone, fatherFatherConfession,
-        church, motherName, motherJob, motherFatherConfession, siblingsCount,
-        siblingsNames, siblingsDob, notes
-      });
-      showToast(`${name}'s details were updated`);
-    } else {
-      // Adding a brand-new child, starting at 0 points
-      await addDoc(childrenCollection, {
-        name, dob, grade, address, phone, motherPhone, school, talent,
-        fatherConfession, inScout, fatherJob, fatherPhone, fatherFatherConfession,
-        church, motherName, motherJob, motherFatherConfession, siblingsCount,
-        siblingsNames, siblingsDob, notes,
-        points: 0,
-        createdAt: serverTimestamp(),
-      });
-      showToast(`${name} was added to the board 🎉`);
-    }
-    closeChildModal();
-  } catch (error) {
-    console.error("Error saving child:", error);
-    formError.textContent =
-      "Something went wrong saving that child. Please try again.";
-    formError.classList.remove("hidden");
-  } finally {
-    saveChildBtn.disabled = false;
-  }
-});
 
 /* ==========================================================================
    DELETE CONFIRM MODAL
@@ -1116,164 +1301,12 @@ function closeDeleteModal() {
   deletingChildId = null;
 }
 
-cancelDeleteBtn.addEventListener("click", closeDeleteModal);
-deleteModalOverlay.addEventListener("click", (event) => {
-  if (event.target === deleteModalOverlay) closeDeleteModal();
-});
-
-confirmDeleteBtn.addEventListener("click", async () => {
-  if (!deletingChildId) return;
-  try {
-    await deleteDoc(doc(db, "children", deletingChildId));
-  } catch (error) {
-    console.error("Error deleting child:", error);
-    showToast("Couldn't delete that child — please try again.");
-  }
-  closeDeleteModal();
-});
-
 /* ==========================================================================
    EVENT DELEGATION FOR CARD BUTTONS
    Instead of attaching listeners to every single card (which we'd have to
    redo every time a card is created), we listen once on the grid container
    and figure out which card + button was clicked.
    ========================================================================== */
-
-childGrid.addEventListener("click", (event) => {
-  const card = event.target.closest(".child-card");
-  if (!card) return;
-  const id = card.dataset.id;
-
-  // If clicking on the collapse button or outside the expanded content, close
-  if (event.target.closest(".collapse-btn")) {
-    toggleCardExpand(card, false);
-    return;
-  }
-
-  // If card is already expanded and clicking on the overlay background, close it
-  if (card.classList.contains("is-expanded") && !event.target.closest(".child-details") && !event.target.closest(".point-controls") && !event.target.closest(".card-top-actions")) {
-    toggleCardExpand(card, false);
-    return;
-  }
-
-  const pointButton = event.target.closest(
-    ".btn-point:not(.btn-point--custom)",
-  );
-  if (pointButton) {
-    const amount = Number(pointButton.dataset.amount);
-    const action = pointButton.dataset.action || "add";
-    updateChildPoints(id, amount, action);
-    return;
-  }
-
-  const removeCustomBtn = event.target.closest(
-    ".btn-point--custom.btn-point--remove",
-  );
-  if (removeCustomBtn) {
-    const form = removeCustomBtn.closest(".custom-point-form");
-    const input = form?.querySelector(".custom-point-input");
-    const amount = Number(input?.value);
-    if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
-      input?.focus();
-      return;
-    }
-    updateChildPoints(id, amount, "remove");
-    input.value = "";
-    return;
-  }
-
-  // Expand/Collapse button
-  if (event.target.closest(".expand-btn")) {
-    toggleCardExpand(card, true);
-    return;
-  }
-
-  // Edit button: first expand the card to show all details, then open the edit modal
-  if (event.target.closest(".edit-btn")) {
-    // Expand the card first to show all details
-    if (!card.classList.contains("is-expanded")) {
-      toggleCardExpand(card, true);
-    }
-    // Then open the edit modal
-    openEditModal(id, {
-      name: card.dataset.name || "",
-      dob: card.dataset.dob || "",
-      grade: card.dataset.grade || "",
-      address: card.dataset.address || "",
-      phone: card.dataset.phone || "",
-      motherPhone: card.dataset.motherPhone || "",
-      school: card.dataset.school || "",
-      talent: card.dataset.talent || "",
-      fatherConfession: card.dataset.fatherConfession || "no",
-      inScout: card.dataset.inScout || "no",
-      fatherJob: card.dataset.fatherJob || "",
-      fatherPhone: card.dataset.fatherPhone || "",
-      fatherFatherConfession: card.dataset.fatherFatherConfession || "no",
-      church: card.dataset.church || "",
-      motherName: card.dataset.motherName || "",
-      motherJob: card.dataset.motherJob || "",
-      motherFatherConfession: card.dataset.motherFatherConfession || "no",
-      siblingsCount: card.dataset.siblingsCount || "",
-      siblingsNames: card.dataset.siblingsNames || "",
-      siblingsDob: card.dataset.siblingsDob || "",
-      notes: card.dataset.notes || "",
-    });
-    return;
-  }
-
-  // Delete button
-  if (event.target.closest(".delete-btn")) {
-    const name = card.querySelector(".child-name").textContent;
-    openDeleteModal(id, name);
-    return;
-  }
-
-  // Click on points display to open points modal
-  if (event.target.closest(".points-display") && !card.classList.contains("is-expanded")) {
-    openPointsModal(id, {
-      name: card.dataset.name || "",
-      grade: card.dataset.grade || "",
-      points: lastKnownPointsById.get(id) || 0,
-    });
-    return;
-  }
-
-  // Click on card itself to expand (if not already expanded)
-  if (!card.classList.contains("is-expanded")) {
-    toggleCardExpand(card, true);
-  }
-});
-
-// Custom point amount form (submit via Enter key or the "Add" button)
-childGrid.addEventListener("submit", (event) => {
-  const form = event.target.closest(".custom-point-form");
-  if (!form) return;
-  event.preventDefault();
-
-  const card = form.closest(".child-card");
-  const input = form.querySelector(".custom-point-input");
-  const amount = Number(input.value);
-
-  if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
-    input.focus();
-    return;
-  }
-
-  updateChildPoints(card.dataset.id, amount, "add");
-  input.value = "";
-});
-
-async function updateChildPoints(id, amount, action = "add") {
-  const delta = action === "remove" ? -Math.abs(amount) : Math.abs(amount);
-  try {
-    // Firestore's increment() applies the change atomically on the server,
-    // so simultaneous taps from a phone and a PC never overwrite each other.
-    await updateDoc(doc(db, "children", id), { points: increment(delta) });
-  } catch (error) {
-    console.error("Error updating points:", error);
-    showToast("Couldn't update points — please try again.");
-  }
-}
 
 /* ==========================================================================
    COLLAPSIBLE CARD LOGIC
