@@ -892,6 +892,14 @@ function toggleCardExpand(card, expand) {
     const centerX = startX + startWidth / 2;
     const centerY = startY + startHeight / 2;
     
+    // Calculate target dimensions (vertical rectangle)
+    const targetWidth = Math.min(600, window.innerWidth * 0.95);
+    const targetHeight = Math.min(700, window.innerHeight * 0.9);
+    
+    // Calculate target position (centered)
+    const targetX = centerX - targetWidth / 2;
+    const targetY = centerY - targetHeight / 2;
+    
     // Set initial position for animation - position at original location
     card.style.position = "fixed";
     card.style.top = startY + "px";
@@ -899,7 +907,7 @@ function toggleCardExpand(card, expand) {
     card.style.width = startWidth + "px";
     card.style.height = startHeight + "px";
     card.style.margin = "0";
-    card.style.transform = "translate(0, 0) scale(1)";
+    card.style.transform = "translate(0, 0)";
     card.style.zIndex = "1000";
     
     // Add expanding class to trigger animation
@@ -908,14 +916,6 @@ function toggleCardExpand(card, expand) {
     // Force reflow
     void card.offsetWidth;
     
-    // Calculate target dimensions (vertical rectangle)
-    const targetWidth = Math.min(600, window.innerWidth * 0.95);
-    const targetHeight = Math.min(700, window.innerHeight * 0.9);
-    
-    // Animate to center and expand
-    const targetX = centerX - targetWidth / 2;
-    const targetY = centerY - targetHeight / 2;
-    
     // Use CSS transition for smooth animation
     card.style.transition = "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
     card.style.top = targetY + "px";
@@ -923,14 +923,15 @@ function toggleCardExpand(card, expand) {
     card.style.width = targetWidth + "px";
     card.style.height = targetHeight + "px";
     
-    // After animation completes, set final state
+// After animation completes, set final state
     setTimeout(() => {
       card.classList.add("is-expanded");
-      card.style.top = "50%";
-      card.style.left = "50%";
+      // The card is already at the right position (targetX, targetY)
+      // Just set the transform to center it properly
       card.style.transform = "translate(-50%, -50%)";
       card.style.width = targetWidth + "px";
       card.style.height = targetHeight + "px";
+      card.style.transition = "";
     }, 400);
     
     expandedCardId = id;
@@ -970,7 +971,7 @@ function toggleCardExpand(card, expand) {
       card.style.left = (centerX - originalWidth / 2) + "px";
       card.style.width = originalWidth + "px";
       card.style.height = originalHeight + "px";
-      card.style.transform = "translate(0, 0) scale(1)";
+      card.style.transform = "translate(0, 0)";
       
       // After animation completes, reset styles
       setTimeout(() => {
