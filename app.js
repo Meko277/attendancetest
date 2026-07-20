@@ -389,11 +389,14 @@ function applyCardData(card, data, { isNew = false } = {}) {
   card.querySelector(".avatar-initials").textContent = getInitials(
     data.name || "?",
   );
-  card.querySelector(".child-name").textContent = data.name || "Unnamed";
-  card.querySelector(".child-grade").textContent = data.grade || "No grade set";
-  card.querySelector(".child-meta").textContent =
-    `Age ${age ?? "?"} · Born ${formatDob(data.dob)}`;
-  card.querySelector(".rank-name").textContent = tier.name;
+  // Update all .child-name elements (both collapsed and expanded views)
+  card.querySelectorAll(".child-name").forEach(el => el.textContent = data.name || "Unnamed");
+  // Update all .child-grade elements (both collapsed and expanded views)
+  card.querySelectorAll(".child-grade").forEach(el => el.textContent = data.grade || "No grade set");
+  // Update all .child-meta elements (both collapsed and expanded views)
+  card.querySelectorAll(".child-meta").forEach(el => el.textContent = `Age ${age ?? "?"} · Born ${formatDob(data.dob)}`);
+  // Update all .rank-name elements (both collapsed and expanded views)
+  card.querySelectorAll(".rank-name").forEach(el => el.textContent = tier.name);
 
   // Update detail values
   card.querySelector(".child-address").textContent = data.address || "—";
@@ -435,17 +438,20 @@ function applyCardData(card, data, { isNew = false } = {}) {
   ringFill.style.stroke = tier.color;
 
   // Points number: animate from the last known value if this is an update
-  const pointsNumberEl = card.querySelector(".points-number");
+  const pointsNumberEls = card.querySelectorAll(".points-number");
   const pointsDisplayEl = card.querySelector(".points-display");
   const previousPoints = lastKnownPointsById.has(card.dataset.id)
     ? lastKnownPointsById.get(card.dataset.id)
     : points;
 
   if (isNew) {
-    pointsNumberEl.textContent = points;
+    pointsNumberEls.forEach(el => el.textContent = points);
   } else if (previousPoints !== points) {
-    animateNumber(pointsNumberEl, previousPoints, points);
-    replayAnimation(pointsNumberEl, "is-popping", 450);
+    // Animate all points number elements
+    pointsNumberEls.forEach(el => {
+      animateNumber(el, previousPoints, points);
+      replayAnimation(el, "is-popping", 450);
+    });
     spawnFloater(pointsDisplayEl, points - previousPoints);
   }
 
