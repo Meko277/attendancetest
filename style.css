@@ -487,11 +487,6 @@ body.dark .rank-name {
   display: none !important;
 }
 
-.child-card.is-expanded .card-expanded {
-  display: flex !important;
-  max-height: 90vh !important;
-}
-
 /* When card is expanded, disable pointer events on the app to prevent interaction */
 .app.blur-when-expanded {
   pointer-events: none;
@@ -502,17 +497,6 @@ body.dark .rank-name {
 .modal-overlay,
 .points-modal-card {
   pointer-events: auto !important;
-}
-
-@keyframes card-expand {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
 }
 
 /* Dark overlay behind expanded card */
