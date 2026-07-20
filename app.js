@@ -923,6 +923,9 @@ function toggleCardExpand(card, expand) {
     card.style.width = targetWidth + "px";
     card.style.height = targetHeight + "px";
     
+    // Add is-expanded class to show the expanded content
+    card.classList.add("is-expanded");
+    
     expandedCardId = id;
     
     // Blur the background
