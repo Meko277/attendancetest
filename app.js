@@ -24,6 +24,7 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
 // vvvvvvvvvvvvvvvvvvvvvv  PASTE YOUR FIREBASE CONFIG HERE  vvvvvvvvvvvvvvvvvvvvvv
 export const firebaseConfig = {
   apiKey: "AIzaSyD4ENSYFjyTA1N5gBleUMVTOJsP2i4EnmU", // ❗ Replace with your actual API key
@@ -35,11 +36,19 @@ export const firebaseConfig = {
   measurementId: "G-LV64L0Y8SB",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-const childrenCollection = collection(db, "children");
+// Initialize Firebase with error handling
+let app;
+let db;
+let childrenCollection;
+try {
+  app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  db = getFirestore(app);
+  childrenCollection = collection(db, "children");
+  console.log("Firebase initialized successfully");
+} catch (error) {
+  console.error("Firebase initialization error:", error);
+}
 
 /* ==========================================================================
    RANK / TIER SYSTEM
@@ -475,6 +484,35 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initLanguage();
   
+  // Set initial connection status
+  setConnectionStatus("connecting");
+  
+  // Set a timeout to show error if connection takes too long
+  let connectionTimeout = setTimeout(() => {
+    if (!connectionStatus.classList.contains("is-live")) {
+      setConnectionStatus("error");
+    }
+  }, 10000); // 10 seconds timeout
+  
+  // Theme toggle event handler
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", () => {
+      const nextTheme = document.body.classList.contains("dark")
+        ? "light"
+        : "dark";
+      applyTheme(nextTheme);
+    });
+  }
+  
+  // Language toggle event handler
+  const languageToggleBtn = document.getElementById("languageToggleBtn");
+  if (languageToggleBtn) {
+    languageToggleBtn.addEventListener("click", () => {
+      const nextLang = currentLanguage === "en" ? "ar" : "en";
+      applyLanguage(nextLang);
+    });
+  }
+  
   // Grade filter event handlers
   const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
   const gradeExportContainer = document.getElementById("gradeExportContainer");
@@ -519,9 +557,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Firestore real-time listener
 function startFirestoreListener() {
+  console.log("Starting Firestore listener...");
   onSnapshot(
     childrenCollection,
     (snapshot) => {
+      console.log("Firestore connected successfully!");
       setConnectionStatus("live");
 
       snapshot.docChanges().forEach((change) => {
@@ -979,29 +1019,11 @@ function openEditModal(id, data) {
   fieldSiblingsCount.value = data.siblingsCount || "";
   fieldSiblingsNames.value = data.siblingsNames || "";
   fieldSiblingsDob.value = data.siblingsDob || "";
-  fieldNotes.value = data.notes || "";
+fieldNotes.value = data.notes || "";
   formError.classList.add("hidden");
   childModalOverlay.classList.remove("hidden");
   document.body.classList.add("modal-open");
   fieldName.focus();
-}
-
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener("click", () => {
-    const nextTheme = document.body.classList.contains("dark")
-      ? "light"
-      : "dark";
-    applyTheme(nextTheme);
-  });
-}
-
-// Language toggle event handler
-const languageToggleBtn = document.getElementById("languageToggleBtn");
-if (languageToggleBtn) {
-  languageToggleBtn.addEventListener("click", () => {
-    const nextLang = currentLanguage === "en" ? "ar" : "en";
-    applyLanguage(nextLang);
-  });
 }
 
 openAddModalBtn.addEventListener("click", openAddModal);
