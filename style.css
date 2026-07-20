@@ -1057,7 +1057,7 @@ body.dark .search-input {
 .collapse-btn {
   position: absolute;
   top: 8px;
-  right: 8px;
+  left: 8px;
   font-size: 11px;
   padding: 4px 10px;
   z-index: 20;

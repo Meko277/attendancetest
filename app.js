@@ -199,6 +199,9 @@ initTheme();
 
 // Grade filter event handlers
 const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
+const gradeExportContainer = document.getElementById("gradeExportContainer");
+const gradeExportBtn = document.getElementById("gradeExportBtn");
+
 gradeFilterButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     // Update active state
@@ -207,6 +210,14 @@ gradeFilterButtons.forEach((btn) => {
     
     // Set the filter
     gradeFilter = btn.dataset.grade;
+    
+    // Show export button only for specific grades (not "all")
+    if (gradeFilter !== "all") {
+      gradeExportContainer.classList.remove("hidden");
+      gradeExportBtn.dataset.grade = gradeFilter;
+    } else {
+      gradeExportContainer.classList.add("hidden");
+    }
     
     // Apply filters
     filterChildren();

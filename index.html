@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Star Trackers · Attendance & Reward Board</title>
+    <title>St.George Church · Attendance & Reward Board</title>
 
     <!-- Google Fonts: Baloo 2 for playful display headings, Nunito for readable body text -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,7 +38,7 @@
         <div class="brand">
           <span class="brand-badge">★</span>
           <div class="brand-text">
-            <h1>Star Trackers</h1>
+            <h1>St.George Church</h1>
             <p>Attendance & reward board</p>
           </div>
         </div>
@@ -50,10 +50,8 @@
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="5th grade">5th</button>
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="6th grade">6th</button>
           </div>
-          <div class="grade-export">
-            <button type="button" class="btn btn-ghost grade-export-btn" data-grade="4th grade" title="Export 4th grade to file">📊</button>
-            <button type="button" class="btn btn-ghost grade-export-btn" data-grade="5th grade" title="Export 5th grade to file">📊</button>
-            <button type="button" class="btn btn-ghost grade-export-btn" data-grade="6th grade" title="Export 6th grade to file">📊</button>
+          <div class="grade-export hidden" id="gradeExportContainer">
+            <button type="button" class="btn btn-ghost grade-export-btn" id="gradeExportBtn" title="Export grade to file">📊 Export</button>
           </div>
           <div class="search-container">
             <input
