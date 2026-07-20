@@ -460,7 +460,7 @@ body.dark .rank-name {
   }
 }
 
-/* Expanded card state - full overlay centered on screen */
+/* Expanded card state - stretched from original position */
 .child-card.is-expanded {
   position: fixed !important;
   top: 50% !important;
@@ -469,7 +469,8 @@ body.dark .rank-name {
   z-index: 1000 !important;
   width: 95vw !important;
   max-width: 600px !important;
-  max-height: 95vh !important;
+  max-height: 90vh !important;
+  height: auto !important;
   box-shadow: 0 25px 60px rgba(45, 49, 66, 0.3) !important;
   background: var(--surface-solid) !important;
   backdrop-filter: none !important;
@@ -480,6 +481,7 @@ body.dark .rank-name {
 .child-card.is-expanding {
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   z-index: 1000 !important;
+  transform-origin: center center;
 }
 
 /* When card is expanded, hide the collapsed view and show the expanded view */
