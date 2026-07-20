@@ -35,8 +35,8 @@
 
       <!-- ============ HEADER ============ -->
       <header class="topbar">
-        <div class="brand">
-          <span class="brand-badge">assets/church_logo.png</span>
+<div class="brand">
+          <img src="assets/church_logo.png" alt="Church Logo" class="brand-badge" />
           <div class="brand-text">
             <h1>St.George Church</h1>
             <p>Attendance & reward board</p>
@@ -50,8 +50,11 @@
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="5th grade">5th</button>
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="6th grade">6th</button>
           </div>
-          <div class="grade-export hidden" id="gradeExportContainer">
-            <button type="button" class="btn btn-ghost grade-export-btn" id="gradeExportBtn" title="Export grade to file">assets/import-export.png Export</button>
+<div class="grade-export hidden" id="gradeExportContainer">
+            <button type="button" class="btn btn-ghost grade-export-btn" id="gradeExportBtn" title="Export grade to file">
+              <span class="export-icon" aria-hidden="true">📊</span>
+              <span class="export-label">Export</span>
+            </button>
           </div>
           <div class="search-container">
             <input

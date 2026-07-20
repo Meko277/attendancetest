@@ -204,14 +204,11 @@ input {
 }
 
 .brand-badge {
-  display: grid;
-  place-items: center;
+  display: block;
   width: 52px;
   height: 52px;
   border-radius: 16px;
-  background: linear-gradient(135deg, var(--sun), var(--coral));
-  color: white;
-  font-size: 26px;
+  object-fit: cover;
   box-shadow: var(--shadow-soft);
   transform: rotate(-6deg);
 }

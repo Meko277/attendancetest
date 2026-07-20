@@ -589,14 +589,13 @@ function exportGradeToPDF(grade) {
 // Set "All" as active by default
 document.querySelector('.grade-filter-btn[data-grade="all"]')?.classList.add("is-active");
 
-// Grade export button event handlers
-const gradeExportButtons = document.querySelectorAll(".grade-export-btn");
-gradeExportButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const grade = btn.dataset.grade;
+// Grade export button event handler
+if (gradeExportBtn) {
+  gradeExportBtn.addEventListener("click", () => {
+    const grade = gradeExportBtn.dataset.grade;
     exportGradeToPDF(grade);
   });
-});
+}
 
 /* ==========================================================================
    RENDERING HELPERS
