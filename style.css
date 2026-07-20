@@ -482,6 +482,7 @@ body.dark .rank-name {
   z-index: 1000 !important;
 }
 
+/* When card is expanded, hide the collapsed view and show the expanded view */
 .child-card.is-expanded .card-collapsed {
   display: none !important;
 }
@@ -489,19 +490,6 @@ body.dark .rank-name {
 .child-card.is-expanded .card-expanded {
   display: flex !important;
   max-height: 90vh !important;
-}
-
-/* Show all content in expanded view (name, grade, meta, points, and details) */
-.child-card.is-expanded .child-name,
-.child-card.is-expanded .child-grade,
-.child-card.is-expanded .child-meta,
-.child-card.is-expanded .rank-name,
-.child-card.is-expanded .points-display {
-  display: block !important;
-}
-
-.child-card.is-expanded .points-display {
-  display: flex !important;
 }
 
 /* When card is expanded, disable pointer events on the app to prevent interaction */
@@ -1020,9 +1008,12 @@ body.dark .search-input {
 /* ==========================================================================
    CHILD DETAILS (Expanded overlay)
    ========================================================================== */
+/* Collapsed view - visible by default */
 .card-collapsed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  margin-top: 8px;
 }
 .expand-btn {
   font-size: 11px;
@@ -1037,7 +1028,7 @@ body.dark .search-input {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--surface);
+  background: var(--surface-solid);
   border-radius: var(--radius-lg);
   padding: 40px 14px 14px 14px;
   flex-direction: column;
