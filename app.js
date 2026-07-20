@@ -892,9 +892,10 @@ function toggleCardExpand(card, expand) {
     const centerX = startX + startWidth / 2;
     const centerY = startY + startHeight / 2;
     
-    // Calculate target dimensions (vertical rectangle)
-    const targetWidth = Math.min(600, window.innerWidth * 0.95);
-    const targetHeight = Math.min(700, window.innerHeight * 0.9);
+    // Keep the card as a square when expanded
+    const targetSize = Math.min(400, Math.max(startWidth, startHeight) * 1.5);
+    const targetWidth = targetSize;
+    const targetHeight = targetSize;
     
     // Calculate target position (centered)
     const targetX = centerX - targetWidth / 2;
