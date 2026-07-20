@@ -462,19 +462,13 @@ body.dark .rank-name {
 
 /* Expanded card state - stretched from original position */
 .child-card.is-expanded {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) scale(1) !important;
-  z-index: 1000 !important;
-  width: 95vw !important;
-  max-width: 600px !important;
-  max-height: 90vh !important;
-  height: auto !important;
-  box-shadow: 0 25px 60px rgba(45, 49, 66, 0.3) !important;
-  background: var(--surface-solid) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  z-index: 1000;
+  max-height: 90vh;
+  height: auto;
+  box-shadow: 0 25px 60px rgba(45, 49, 66, 0.3);
+  background: var(--surface-solid);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Card during expansion animation - from original position to center */
