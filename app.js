@@ -470,35 +470,106 @@ let gradeFilter = "all";
 // Store all children data for sorting
 const childrenDataById = new Map();
 
-initTheme();
-initLanguage();
+// Initialize theme and language after DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  initLanguage();
+  
+  // Grade filter event handlers
+  const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
+  const gradeExportContainer = document.getElementById("gradeExportContainer");
+  const gradeExportBtn = document.getElementById("gradeExportBtn");
 
-// Grade filter event handlers
-const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
-const gradeExportContainer = document.getElementById("gradeExportContainer");
-const gradeExportBtn = document.getElementById("gradeExportBtn");
-
-gradeFilterButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    // Update active state
-    gradeFilterButtons.forEach((b) => b.classList.remove("is-active"));
-    btn.classList.add("is-active");
-    
-    // Set the filter
-    gradeFilter = btn.dataset.grade;
-    
-    // Show export button only for specific grades (not "all")
-    if (gradeFilter !== "all") {
-      gradeExportContainer.classList.remove("hidden");
-      gradeExportBtn.dataset.grade = gradeFilter;
-    } else {
-      gradeExportContainer.classList.add("hidden");
-    }
-    
-    // Apply filters
-    filterChildren();
+  gradeFilterButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // Update active state
+      gradeFilterButtons.forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      
+      // Set the filter
+      gradeFilter = btn.dataset.grade;
+      
+      // Show export button only for specific grades (not "all")
+      if (gradeFilter !== "all") {
+        gradeExportContainer.classList.remove("hidden");
+        gradeExportBtn.dataset.grade = gradeFilter;
+      } else {
+        gradeExportContainer.classList.add("hidden");
+      }
+      
+      // Apply filters
+      filterChildren();
+    });
   });
+
+  // Set "All" as active by default
+  document.querySelector('.grade-filter-btn[data-grade="all"]')?.classList.add("is-active");
+
+  // Grade export button event handler
+  if (gradeExportBtn) {
+    gradeExportBtn.addEventListener("click", () => {
+      const grade = gradeExportBtn.dataset.grade;
+      exportGradeToPDF(grade);
+    });
+  }
+  
+  // Start Firestore listener after DOM is ready
+  startFirestoreListener();
 });
+
+// Firestore real-time listener
+function startFirestoreListener() {
+  onSnapshot(
+    childrenCollection,
+    (snapshot) => {
+      setConnectionStatus("live");
+
+      snapshot.docChanges().forEach((change) => {
+        const id = change.doc.id;
+        const data = change.doc.data();
+
+        if (change.type === "added") {
+          // Skip re-adding a card we already have (can happen on first load)
+          if (cardElementsById.has(id)) {
+            applyCardData(cardElementsById.get(id), data);
+            return;
+          }
+          const card = buildCardElement(id, data);
+          childGrid.appendChild(card);
+          cardElementsById.set(id, card);
+        }
+
+        if (change.type === "modified") {
+          const card = cardElementsById.get(id);
+          if (card) applyCardData(card, data);
+        }
+
+        if (change.type === "removed") {
+          const card = cardElementsById.get(id);
+          if (card) {
+            card.classList.add("is-leaving");
+            setTimeout(() => {
+              card.remove();
+              updateEmptyState();
+            }, 280);
+            cardElementsById.delete(id);
+            lastKnownPointsById.delete(id);
+          }
+        }
+      });
+
+      // Sort cards by points (highest first)
+      sortCardsByPoints();
+      
+      updateEmptyState();
+      filterChildren(); // Apply search filter after updates
+    },
+    (error) => {
+      console.error("Firestore listener error:", error);
+      setConnectionStatus("error");
+    },
+  );
+}
 
 // PDF export function
 function exportGradeToPDF(grade) {
@@ -584,17 +655,6 @@ function exportGradeToPDF(grade) {
   }, 500);
   
   showToast(`Exporting ${cards.length} children to PDF...`);
-}
-
-// Set "All" as active by default
-document.querySelector('.grade-filter-btn[data-grade="all"]')?.classList.add("is-active");
-
-// Grade export button event handler
-if (gradeExportBtn) {
-  gradeExportBtn.addEventListener("click", () => {
-    const grade = gradeExportBtn.dataset.grade;
-    exportGradeToPDF(grade);
-  });
 }
 
 /* ==========================================================================
@@ -860,64 +920,6 @@ function sortCardsByPoints() {
   // Re-append cards in sorted order
   cards.forEach(card => childGrid.appendChild(card));
 }
-
-/* ==========================================================================
-   FIRESTORE REAL-TIME LISTENER
-   docChanges() tells us precisely which children were added, modified, or
-   removed since the last update — that's what lets us animate in place
-   instead of redrawing the whole grid every time (which would kill the
-   entrance/pop animations and feel janky).
-   ========================================================================== */
-onSnapshot(
-  childrenCollection,
-  (snapshot) => {
-    setConnectionStatus("live");
-
-    snapshot.docChanges().forEach((change) => {
-      const id = change.doc.id;
-      const data = change.doc.data();
-
-      if (change.type === "added") {
-        // Skip re-adding a card we already have (can happen on first load)
-        if (cardElementsById.has(id)) {
-          applyCardData(cardElementsById.get(id), data);
-          return;
-        }
-        const card = buildCardElement(id, data);
-        childGrid.appendChild(card);
-        cardElementsById.set(id, card);
-      }
-
-      if (change.type === "modified") {
-        const card = cardElementsById.get(id);
-        if (card) applyCardData(card, data);
-      }
-
-      if (change.type === "removed") {
-        const card = cardElementsById.get(id);
-        if (card) {
-          card.classList.add("is-leaving");
-          setTimeout(() => {
-            card.remove();
-            updateEmptyState();
-          }, 280);
-          cardElementsById.delete(id);
-          lastKnownPointsById.delete(id);
-        }
-      }
-    });
-
-    // Sort cards by points (highest first)
-    sortCardsByPoints();
-    
-    updateEmptyState();
-    filterChildren(); // Apply search filter after updates
-  },
-  (error) => {
-    console.error("Firestore listener error:", error);
-    setConnectionStatus("error");
-  },
-);
 
 function setConnectionStatus(state) {
   connectionStatus.classList.remove("is-live", "is-error");
