@@ -510,10 +510,39 @@ function exportGradeToPDF(grade) {
     return;
   }
   
-  // Create a simple text-based export (since we can't use external libraries)
-  let content = `Children in ${grade}\n\n`;
-  content += "Name | Points | Address | Phone | School | Talent\n";
-  content += "--- | --- | --- | --- | --- | ---\n";
+  // Create HTML table for PDF export
+  const t = translations[currentLanguage];
+  let htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>${t.export} - ${grade}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; direction: ${currentLanguage === 'ar' ? 'rtl' : 'ltr'}; }
+        h1 { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: ${currentLanguage === 'ar' ? 'right' : 'left'}; }
+        th { background-color: #4ecdc4; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .header { margin-bottom: 20px; }
+      </style>
+    </head>
+    <body>
+      <h1>${t.export} - ${grade}</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>${t.name}</th>
+            <th>${t.points}</th>
+            <th>${t.address}</th>
+            <th>${t.phoneNumber}</th>
+            <th>${t.schoolName}</th>
+            <th>${t.talent}</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
   
   cards.forEach(card => {
     const name = card.dataset.name || "";
@@ -523,19 +552,38 @@ function exportGradeToPDF(grade) {
     const school = card.dataset.school || "";
     const talent = card.dataset.talent || "";
     
-    content += `${name} | ${points} | ${address} | ${phone} | ${school} | ${talent}\n`;
+    htmlContent += `
+      <tr>
+        <td>${name}</td>
+        <td>${points}</td>
+        <td>${address}</td>
+        <td>${phone}</td>
+        <td>${school}</td>
+        <td>${talent}</td>
+      </tr>
+    `;
   });
   
-  // Create a downloadable text file
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `children-${grade.replace(' ', '-')}.txt`;
-  a.click();
-  URL.revokeObjectURL(url);
+  htmlContent += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
   
-  showToast(`Exported ${cards.length} children to file`);
+  // Create a new window and print it as PDF
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+  printWindow.focus();
+  
+  // Trigger print dialog after a short delay
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 500);
+  
+  showToast(`Exporting ${cards.length} children to PDF...`);
 }
 
 // Set "All" as active by default
