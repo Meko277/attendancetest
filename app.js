@@ -151,6 +151,281 @@ const toastEl = document.getElementById("toast");
 const themeToggleBtn = document.getElementById("themeToggleBtn");
 
 const THEME_STORAGE_KEY = "star-trackers-theme";
+const LANGUAGE_STORAGE_KEY = "star-trackers-language";
+
+// Translation object
+const translations = {
+  en: {
+    // Header
+    brandTitle: "St.George Church",
+    brandSubtitle: "Attendance & reward board",
+    // Buttons
+    darkMode: "Dark mode",
+    lightMode: "Light mode",
+    addChild: "Add child",
+    saveChild: "Save child",
+    saveChanges: "Save changes",
+    cancel: "Cancel",
+    delete: "Delete",
+    // Grade filters
+    all: "All",
+    fourth: "4th",
+    fifth: "5th",
+    sixth: "6th",
+    // Empty state
+    noStars: "No stars on the board yet",
+    addFirstChild: "Add your first child to start tracking attendance and rewards.",
+    addChildBtn: "+ Add a child",
+    // Modal
+    addChildTitle: "Add a child",
+    editTitle: "Edit",
+    // Fields
+    name: "Name",
+    dateOfBirth: "Date of birth",
+    grade: "Grade",
+    address: "Address",
+    phoneNumber: "Phone number",
+    mothersPhone: "Mother's phone number (if no phone)",
+    schoolName: "School name",
+    talent: "Talent or sport",
+    fathersConfession: "Father's confession",
+    inScout: "In scout",
+    fathersJob: "Father's job",
+    fathersPhone: "Father's phone",
+    fathersFathersConfession: "Father's father's confession",
+    church: "Church",
+    mothersName: "Mother's full name",
+    mothersJob: "Mother's job",
+    mothersFathersConfession: "Mother's father's confession",
+    siblingsCount: "Number of brothers/sisters",
+    siblingsNames: "Names of brothers/sisters",
+    siblingsDob: "Date of birth of brothers/sisters",
+    notes: "Important notes",
+    // Details
+    addressLabel: "Address:",
+    phoneLabel: "Phone:",
+    schoolLabel: "School:",
+    talentLabel: "Talent/Sport:",
+    fathersConfessionLabel: "Father's confession:",
+    inScoutLabel: "In Scout:",
+    fathersJobLabel: "Father's job:",
+    fathersPhoneLabel: "Father's phone:",
+    fathersFathersConfessionLabel: "Father's father's confession:",
+    churchLabel: "Church:",
+    mothersNameLabel: "Mother's name:",
+    mothersPhoneLabel: "Mother's phone:",
+    mothersJobLabel: "Mother's job:",
+    mothersFathersConfessionLabel: "Mother's father's confession:",
+    siblingsLabel: "Siblings:",
+    notesLabel: "Notes:",
+    // Other
+    showDetails: "Show details",
+    hideDetails: "Hide details",
+    export: "Export",
+    searchPlaceholder: "Search children...",
+    noGrade: "No grade set",
+    noChildren: "No children found in",
+    exported: "children to file",
+    // Points
+    points: "points",
+    customAmount: "Custom amount",
+    add: "Add",
+    remove: "Remove",
+    // Delete modal
+    removeChild: "Remove this child?",
+    deleteWarning: "This will permanently delete their record and points.",
+    // Yes/No
+    yes: "Yes",
+    no: "No",
+    selectGrade: "Select grade",
+  },
+  ar: {
+    // Header
+    brandTitle: "كنيسة القديس جورجيوس",
+    brandSubtitle: "لوحة الحضور والجوائز",
+    // Buttons
+    darkMode: "الوضع الداكن",
+    lightMode: "الوضع المضيء",
+    addChild: "إضافة طفل",
+    saveChild: "حفظ الطفل",
+    saveChanges: "حفظ التغييرات",
+    cancel: "إلغاء",
+    delete: "حذف",
+    // Grade filters
+    all: "الكل",
+    fourth: "الصف 4",
+    fifth: "الصف 5",
+    sixth: "الصف 6",
+    // Empty state
+    noStars: "لا توجد نجوم على اللوحة بعد",
+    addFirstChild: "أضف طفلك الأول لبدء تتبع الحضور والجوائز.",
+    addChildBtn: "+ إضافة طفل",
+    // Modal
+    addChildTitle: "إضافة طفل",
+    editTitle: "تعديل",
+    // Fields
+    name: "الاسم",
+    dateOfBirth: "تاريخ الميلاد",
+    grade: "الصف",
+    address: "العنوان",
+    phoneNumber: "رقم الهاتف",
+    mothersPhone: "هاتف الأم (إذا لم يكن هناك هاتف)",
+    schoolName: "اسم المدرسة",
+    talent: "الموهب أو الرياضة",
+    fathersConfession: "اعتراف الأب",
+    inScout: "في الكشافة",
+    fathersJob: "وظيفة الأب",
+    fathersPhone: "هاتف الأب",
+    fathersFathersConfession: "اعتراف أب الأب",
+    church: "الكنيسة",
+    mothersName: "اسم الأم الكامل",
+    mothersJob: "وظيفة الأم",
+    mothersFathersConfession: "اعتراف جد الأم",
+    siblingsCount: "عدد الأخواء",
+    siblingsNames: "أسماء الأخواء",
+    siblingsDob: "تاريخ ميلاد الأخواء",
+    notes: "ملاحظات مهمة",
+    // Details
+    addressLabel: "العنوان:",
+    phoneLabel: "الهاتف:",
+    schoolLabel: "المدرسة:",
+    talentLabel: "الموهب/الرياضة:",
+    fathersConfessionLabel: "اعتراف الأب:",
+    inScoutLabel: "في الكشافة:",
+    fathersJobLabel: "وظيفة الأب:",
+    fathersPhoneLabel: "هاتف الأب:",
+    fathersFathersConfessionLabel: "اعتراف أب الأب:",
+    churchLabel: "الكنيسة:",
+    mothersNameLabel: "اسم الأم:",
+    mothersPhoneLabel: "هاتف الأم:",
+    mothersJobLabel: "وظيفة الأم:",
+    mothersFathersConfessionLabel: "اعتراف جد الأم:",
+    siblingsLabel: "الأخواء:",
+    notesLabel: "الملاحظات:",
+    // Other
+    showDetails: "إظهار التفاصيل",
+    hideDetails: "إخفاء التفاصيل",
+    export: "تصدير",
+    searchPlaceholder: "بحث عن الأطفال...",
+    noGrade: "لا يوجد صف",
+    noChildren: "لا يوجد أطفال في",
+    exported: "طفل تم تصديرهم",
+    // Points
+    points: "نقطة",
+    customAmount: "مبلغ مخصص",
+    add: "إضافة",
+    remove: "إزالة",
+    // Delete modal
+    removeChild: "حذف هذا الطفل؟",
+    deleteWarning: "سيتم حذف سجله ونقاطه بشكل دائم.",
+    // Yes/No
+    yes: "نعم",
+    no: "لا",
+    selectGrade: "اختر الصف",
+  }
+};
+
+let currentLanguage = "en";
+
+function applyLanguage(lang) {
+  currentLanguage = lang;
+  document.body.classList.toggle("arabic", lang === "ar");
+  document.body.lang = lang;
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+  
+  // Update language toggle button
+  const langToggleBtn = document.getElementById("languageToggleBtn");
+  if (langToggleBtn) {
+    const label = langToggleBtn.querySelector(".language-toggle__label");
+    if (label) label.textContent = lang === "en" ? "AR" : "EN";
+  }
+  
+  // Update all translatable elements
+  updateTranslations();
+}
+
+function updateTranslations() {
+  const t = translations[currentLanguage];
+  
+  // Update header
+  const brandTitle = document.querySelector(".brand-text h1");
+  const brandSubtitle = document.querySelector(".brand-text p");
+  if (brandTitle) brandTitle.textContent = t.brandTitle;
+  if (brandSubtitle) brandSubtitle.textContent = t.brandSubtitle;
+  
+  // Update grade filter buttons
+  document.querySelector('.grade-filter-btn[data-grade="all"]')?.textContent = t.all;
+  document.querySelector('.grade-filter-btn[data-grade="4th grade"]')?.textContent = t.fourth;
+  document.querySelector('.grade-filter-btn[data-grade="5th grade"]')?.textContent = t.fifth;
+  document.querySelector('.grade-filter-btn[data-grade="6th grade"]')?.textContent = t.sixth;
+  
+  // Update search placeholder
+  if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+  
+  // Update empty state
+  const emptyH2 = document.querySelector("#emptyState h2");
+  const emptyP = document.querySelector("#emptyState p");
+  const emptyBtn = document.querySelector("#emptyStateAddBtn");
+  if (emptyH2) emptyH2.textContent = t.noStars;
+  if (emptyP) emptyP.textContent = t.addFirstChild;
+  if (emptyBtn) emptyBtn.textContent = t.addChildBtn;
+  
+  // Update modal title
+  if (modalTitle) {
+    if (editingChildId) {
+      modalTitle.textContent = `${t.editTitle} ${fieldName.value}`;
+    } else {
+      modalTitle.textContent = t.addChildTitle;
+    }
+  }
+  
+  // Update field labels
+  document.querySelector('label[for="fieldName"] span')?.textContent = t.name;
+  document.querySelector('label[for="fieldDob"] span')?.textContent = t.dateOfBirth;
+  document.querySelector('label[for="fieldGrade"] span')?.textContent = t.grade;
+  document.querySelector('label[for="fieldAddress"] span')?.textContent = t.address;
+  document.querySelector('label[for="fieldPhone"] span')?.textContent = t.phoneNumber;
+  document.querySelector('label[for="fieldMotherPhone"] span')?.textContent = t.mothersPhone;
+  document.querySelector('label[for="fieldSchool"] span')?.textContent = t.schoolName;
+  document.querySelector('label[for="fieldTalent"] span')?.textContent = t.talent;
+  document.querySelector('label[for="fieldFatherConfession"] span')?.textContent = t.fathersConfession;
+  document.querySelector('label[for="fieldInScout"] span')?.textContent = t.inScout;
+  document.querySelector('label[for="fieldFatherJob"] span')?.textContent = t.fathersJob;
+  document.querySelector('label[for="fieldFatherPhone"] span')?.textContent = t.fathersPhone;
+  document.querySelector('label[for="fieldFatherFatherConfession"] span')?.textContent = t.fathersFathersConfession;
+  document.querySelector('label[for="fieldChurch"] span')?.textContent = t.church;
+  document.querySelector('label[for="fieldMotherName"] span')?.textContent = t.mothersName;
+  document.querySelector('label[for="fieldMotherJob"] span')?.textContent = t.mothersJob;
+  document.querySelector('label[for="fieldMotherFatherConfession"] span')?.textContent = t.mothersFathersConfession;
+  document.querySelector('label[for="fieldSiblingsCount"] span')?.textContent = t.siblingsCount;
+  document.querySelector('label[for="fieldSiblingsNames"] span')?.textContent = t.siblingsNames;
+  document.querySelector('label[for="fieldSiblingsDob"] span')?.textContent = t.siblingsDob;
+  document.querySelector('label[for="fieldNotes"] span')?.textContent = t.notes;
+  
+  // Update buttons
+  const saveBtn = document.getElementById("saveChildBtn");
+  const cancelBtn = document.getElementById("cancelModalBtn");
+  if (saveBtn) saveBtn.textContent = editingChildId ? t.saveChanges : t.saveChild;
+  if (cancelBtn) cancelBtn.textContent = t.cancel;
+  
+  // Update delete modal
+  const deleteH2 = document.querySelector("#deleteModalOverlay h2");
+  const deleteP = document.querySelector("#deleteModalText");
+  if (deleteH2) deleteH2.textContent = t.removeChild;
+  if (deleteP) deleteP.textContent = t.deleteWarning;
+  
+  // Update grade options
+  const gradeOptions = document.querySelectorAll("#fieldGrade option");
+  gradeOptions[0].textContent = t.selectGrade;
+  gradeOptions[1].textContent = "4th grade";
+  gradeOptions[2].textContent = "5th grade";
+  gradeOptions[3].textContent = "6th grade";
+}
+
+function initLanguage() {
+  const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  applyLanguage(savedLang || "en");
+}
 
 function applyTheme(theme) {
   const isDark = theme === "dark";
@@ -196,6 +471,7 @@ let gradeFilter = "all";
 const childrenDataById = new Map();
 
 initTheme();
+initLanguage();
 
 // Grade filter event handlers
 const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
@@ -667,6 +943,15 @@ if (themeToggleBtn) {
       ? "light"
       : "dark";
     applyTheme(nextTheme);
+  });
+}
+
+// Language toggle event handler
+const languageToggleBtn = document.getElementById("languageToggleBtn");
+if (languageToggleBtn) {
+  languageToggleBtn.addEventListener("click", () => {
+    const nextLang = currentLanguage === "en" ? "ar" : "en";
+    applyLanguage(nextLang);
   });
 }
 

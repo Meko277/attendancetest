@@ -375,6 +375,94 @@ body.dark .rank-name {
   color: var(--teal);
 }
 
+/* Arabic language support (RTL) */
+body.arabic {
+  direction: rtl;
+  text-align: right;
+}
+
+body.arabic .topbar {
+  direction: rtl;
+}
+
+body.arabic .topbar-actions {
+  direction: rtl;
+}
+
+body.arabic .grade-filter {
+  direction: rtl;
+}
+
+body.arabic .grade-export {
+  direction: rtl;
+}
+
+body.arabic .search-container {
+  direction: rtl;
+}
+
+body.arabic .brand-text h1,
+body.arabic .brand-text p,
+body.arabic h1,
+body.arabic h2,
+body.arabic h3,
+body.arabic p,
+body.arabic span,
+body.arabic button,
+body.arabic input,
+body.arabic select,
+body.arabic textarea,
+body.arabic label {
+  font-family: "Cairo", "Arial", sans-serif;
+}
+
+body.arabic .card-top-actions {
+  left: 10px;
+  right: auto;
+}
+
+body.arabic .collapse-btn {
+  right: 8px;
+  left: auto;
+}
+
+body.arabic .modal-actions {
+  flex-direction: row-reverse;
+}
+
+body.arabic .custom-point-actions {
+  flex-direction: row-reverse;
+}
+
+body.arabic .quick-buttons {
+  flex-direction: row-reverse;
+}
+
+body.arabic .field input,
+body.arabic .field textarea,
+body.arabic .field select {
+  text-align: right;
+}
+
+body.arabic .search-input {
+  text-align: right;
+  padding-left: 32px;
+  padding-right: 12px;
+}
+
+body.arabic .search-icon {
+  left: auto;
+  right: 10px;
+}
+
+body.arabic .child-details {
+  text-align: right;
+}
+
+body.arabic .detail-row {
+  flex-direction: row-reverse;
+}
+
 /* ==========================================================================
    EMPTY STATE
    ========================================================================== */
