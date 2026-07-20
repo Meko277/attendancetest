@@ -44,11 +44,16 @@
         </div>
 
         <div class="topbar-actions">
-          <div class="grade-filter">
+<div class="grade-filter">
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="all">All</button>
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="4th grade">4th</button>
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="5th grade">5th</button>
             <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="6th grade">6th</button>
+          </div>
+          <div class="grade-export">
+            <button type="button" class="btn btn-ghost grade-export-btn" data-grade="4th grade" title="Export 4th grade to file">📊</button>
+            <button type="button" class="btn btn-ghost grade-export-btn" data-grade="5th grade" title="Export 5th grade to file">📊</button>
+            <button type="button" class="btn btn-ghost grade-export-btn" data-grade="6th grade" title="Export 6th grade to file">📊</button>
           </div>
           <div class="search-container">
             <input
@@ -356,8 +361,25 @@
           </button>
         </div>
 
-        <!-- Expanded view: shows all details and controls -->
+<!-- Expanded view: shows all details and controls -->
         <div class="card-expanded">
+          <div class="card-top-actions">
+            <button
+              class="icon-btn edit-btn"
+              title="Edit child"
+              aria-label="Edit child"
+            >
+              ✎
+            </button>
+            <button
+              class="icon-btn delete-btn"
+              title="Delete child"
+              aria-label="Delete child"
+            >
+              🗑
+            </button>
+          </div>
+          
           <button class="btn btn-ghost collapse-btn" type="button">
             Hide details
           </button>

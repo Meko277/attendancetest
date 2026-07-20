@@ -213,8 +213,55 @@ gradeFilterButtons.forEach((btn) => {
   });
 });
 
+// PDF export function
+function exportGradeToPDF(grade) {
+  // Get all cards for this grade
+  const cards = Array.from(cardElementsById.values()).filter(card => card.dataset.grade === grade);
+  
+  if (cards.length === 0) {
+    showToast(`No children found in ${grade}`);
+    return;
+  }
+  
+  // Create a simple text-based export (since we can't use external libraries)
+  let content = `Children in ${grade}\n\n`;
+  content += "Name | Points | Address | Phone | School | Talent\n";
+  content += "--- | --- | --- | --- | --- | ---\n";
+  
+  cards.forEach(card => {
+    const name = card.dataset.name || "";
+    const points = card.querySelector(".points-number")?.textContent || "0";
+    const address = card.dataset.address || "";
+    const phone = card.dataset.phone || card.dataset.motherPhone || "";
+    const school = card.dataset.school || "";
+    const talent = card.dataset.talent || "";
+    
+    content += `${name} | ${points} | ${address} | ${phone} | ${school} | ${talent}\n`;
+  });
+  
+  // Create a downloadable text file
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `children-${grade.replace(' ', '-')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  showToast(`Exported ${cards.length} children to file`);
+}
+
 // Set "All" as active by default
 document.querySelector('.grade-filter-btn[data-grade="all"]')?.classList.add("is-active");
+
+// Grade export button event handlers
+const gradeExportButtons = document.querySelectorAll(".grade-export-btn");
+gradeExportButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const grade = btn.dataset.grade;
+    exportGradeToPDF(grade);
+  });
+});
 
 /* ==========================================================================
    RENDERING HELPERS
