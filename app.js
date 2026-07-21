@@ -1325,8 +1325,6 @@ function closeDeleteModal() {
    ========================================================================== */
 // Track the currently expanded card
 let expandedCardId = null;
-const expandOverlay = document.getElementById("expandOverlay");
-const appContainer = document.querySelector(".app");
 
 function toggleCardExpand(card, expand) {
   const id = card.dataset.id;
@@ -1338,128 +1336,15 @@ function toggleCardExpand(card, expand) {
       if (prevCard) {
         toggleCardExpand(prevCard, false);
       }
-    }
-    
-    // Get the card's original position and dimensions
-    const rect = card.getBoundingClientRect();
-    const startX = rect.left;
-    const startY = rect.top;
-    const startWidth = rect.width;
-    const startHeight = rect.height;
-    
-    // Calculate center of the card
-    const centerX = startX + startWidth / 2;
-    const centerY = startY + startHeight / 2;
-    
-    // Calculate target dimensions (vertical rectangle)
-    const targetWidth = Math.min(600, window.innerWidth * 0.95);
-    const targetHeight = Math.min(700, window.innerHeight * 0.9);
-    
-    // Calculate target position (centered on screen)
-    const targetX = window.innerWidth / 2 - targetWidth / 2;
-    const targetY = window.innerHeight / 2 - targetHeight / 2;
-    
-    // Set initial position for animation - position at original location
-    card.style.position = "fixed";
-    card.style.top = startY + "px";
-    card.style.left = startX + "px";
-    card.style.width = startWidth + "px";
-    card.style.height = startHeight + "px";
-    card.style.margin = "0";
-    card.style.transform = "translate(0, 0)";
-    card.style.zIndex = "1000";
-    
-    // Add expanding class to trigger animation
-    card.classList.add("is-expanding");
-    
-    // Force reflow
-    void card.offsetWidth;
-    
-    // Use CSS transition for smooth animation
-    card.style.transition = "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)";
-    card.style.top = targetY + "px";
-    card.style.left = targetX + "px";
-    card.style.width = targetWidth + "px";
-    card.style.height = targetHeight + "px";
-    
-    // Add is-expanded class to show the expanded content
+    }    
     card.classList.add("is-expanded");
-    
     expandedCardId = id;
-    
-    // Blur the background
-    if (appContainer) {
-      appContainer.classList.add("blur-when-expanded");
-    }
-    
-    // Show the overlay
-    if (expandOverlay) {
-      expandOverlay.classList.add("visible");
-    }
   } else {
-    // Collapse this card
     card.classList.remove("is-expanded");
-    card.classList.remove("is-expanding");
     if (expandedCardId === id) {
       expandedCardId = null;
     }
-    
-    // Animate back to original position
-    const rect = card.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    // Get the original position from the grid
-    const originalCard = cardElementsById.get(id);
-    if (originalCard) {
-      const originalRect = originalCard.getBoundingClientRect();
-      const originalWidth = originalRect.width;
-      const originalHeight = originalRect.height;
-      
-      // Use CSS transition for smooth animation
-      card.style.transition = "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)";
-      card.style.top = (centerY - originalHeight / 2) + "px";
-      card.style.left = (centerX - originalWidth / 2) + "px";
-      card.style.width = originalWidth + "px";
-      card.style.height = originalHeight + "px";
-      card.style.transform = "translate(0, 0)";
-      
-      // After animation completes, reset styles
-      setTimeout(() => {
-        card.style.position = "";
-        card.style.top = "";
-        card.style.left = "";
-        card.style.width = "";
-        card.style.height = "";
-        card.style.margin = "";
-        card.style.transform = "";
-        card.style.zIndex = "";
-        card.style.transition = "";
-      }, 300);
-    }
-    
-    // Remove blur from background
-    if (appContainer) {
-      appContainer.classList.remove("blur-when-expanded");
-    }
-    
-    // Hide the overlay
-    if (expandOverlay) {
-      expandOverlay.classList.remove("visible");
-    }
   }
-}
-
-// Close expanded card when clicking on overlay
-if (expandOverlay) {
-  expandOverlay.addEventListener("click", () => {
-    if (expandedCardId) {
-      const card = cardElementsById.get(expandedCardId);
-      if (card) {
-        toggleCardExpand(card, false);
-      }
-    }
-  });
 }
 
 /* ==========================================================================
