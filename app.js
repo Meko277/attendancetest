@@ -591,6 +591,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.target === deleteModalOverlay) closeDeleteModal();
     });
   }
+  if (confirmDeleteBtn) {
+    confirmDeleteBtn.addEventListener("click", async () => {
+      if (!deletingChildId) return;
+      try {
+        await deleteDoc(doc(db, "children", deletingChildId));
+      } catch (error) {
+        console.error("Error deleting child:", error);
+        showToast("Couldn't delete that child — please try again.");
+      }
+      closeDeleteModal();
+    });
+  }
   
   // Form submit handler
   if (childForm) {
