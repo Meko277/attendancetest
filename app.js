@@ -1344,28 +1344,24 @@ let expandedCardId = null;
 
 function toggleCardExpand(card, expand) {
   const id = card.dataset.id;
-  const expandedContent = card.querySelector(".card-expanded");
   const expandBtn = card.querySelector(".expand-btn");
   const collapseBtn = card.querySelector(".collapse-btn");
 
   if (expand) {
     // If another card is expanded, collapse it first
     if (expandedCardId && expandedCardId !== id) {
-      const prevCard = cardElementsById.get(expandedCardId);
-      if (prevCard) {
-        toggleCardExpand(prevCard, false);
-      }
+      const previousCard = cardElementsById.get(expandedCardId);
+      if (previousCard) toggleCardExpand(previousCard, false);
     }
-    if (expandedContent) expandedContent.style.display = "block"; // Null check
+
+    card.classList.add("is-expanded");
     if (expandBtn) expandBtn.style.display = "none"; // Null check
     if (collapseBtn) collapseBtn.style.display = "block"; // Null check
-    card.dataset.expanded = "true";
     expandedCardId = id;
   } else {
-    if (expandedContent) expandedContent.style.display = "none"; // Null check
+    card.classList.remove("is-expanded");
     if (expandBtn) expandBtn.style.display = "block"; // Null check
     if (collapseBtn) collapseBtn.style.display = "none"; // Null check
-    card.dataset.expanded = "false";
     if (expandedCardId === id) {
       expandedCardId = null;
     }
