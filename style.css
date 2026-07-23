@@ -1038,9 +1038,23 @@ body.dark .search-input {
 
 /* Expanded overlay - covers the entire card when expanded */
 .card-expanded {
-  display: none; /* Hidden by default, toggled by JS */
+  /* Animate height using grid-template-rows for a smooth transition */
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   width: 100%;
+}
+
+.child-card.is-expanded .card-expanded {
+  grid-template-rows: 1fr;
+}
+
+/* This inner wrapper is necessary for the grid animation to work correctly */
+.card-expanded-content {
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.1s;
 }
 
 .child-details {
@@ -1048,6 +1062,10 @@ body.dark .search-input {
   margin: 8px 0;
   text-align: left;
   animation: fade-in 0.3s ease;
+}
+
+.child-card.is-expanded .card-expanded-content {
+  opacity: 1;
 }
 .detail-row {
   display: flex;
