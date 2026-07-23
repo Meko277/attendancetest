@@ -33,7 +33,7 @@ export const firebaseConfig = {
   storageBucket: "attendance-765b1.firebasestorage.app",
   messagingSenderId: "533258210848",
   appId: "1:533258210848:web:7910c1636d4ed3f8573645",
-  measurementId: "G-LV64L0Y8SB"
+  measurementId: "G-LV64L0Y8SB",
 };
 
 // Initialize Firebase with error handling
@@ -1034,7 +1034,7 @@ function applyCardData(card, data, { isNew = false } = {}) {
       typeof data[key] === "boolean"
     ) {
       // Convert camelCase to kebab-case for dataset attribute
-card.dataset[key] = String(data[key]);
+      card.dataset[key] = String(data[key]);
     }
   }
 
@@ -1151,8 +1151,8 @@ function setConnectionStatus(state, message = "") {
     connectionStatusText.textContent = "Live — syncing across all your devices";
   } else if (state === "error") {
     connectionStatus.classList.add("is-error");
-    connectionStatusText.textContent = message ||
-      "Couldn't connect — check your Firebase config";
+    connectionStatusText.textContent =
+      message || "Couldn't connect — check your Firebase config";
   } else {
     connectionStatusText.textContent = "Connecting to live sync…";
   }
@@ -1255,7 +1255,9 @@ function handlePointUpdate(event, card) {
   const id = card.dataset.id;
 
   // Quick add/remove buttons
-  const pointButton = event.target.closest(".btn-point:not(.btn-point--custom)");
+  const pointButton = event.target.closest(
+    ".btn-point:not(.btn-point--custom)",
+  );
   if (pointButton) {
     const amount = Number(pointButton.dataset.amount);
     const action = pointButton.dataset.action || "add";
@@ -1269,9 +1271,9 @@ function handlePointUpdate(event, card) {
   );
   if (removeCustomBtn) {
     const form = removeCustomBtn.closest(".custom-point-form");
-    if (!form) return;
+    if (!form) return; // Ensure form exists
     const input = form.querySelector(".custom-point-input");
-    if (!input) return;
+    if (!input) return; // Ensure input exists
 
     const amount = Number(input.value);
     if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
@@ -1321,9 +1323,9 @@ function handleCustomPointSubmit(event) {
   event.preventDefault();
 
   const card = form.closest(".child-card");
-  if (!card) return;
+  if (!card) return; // Ensure card exists
   const input = form.querySelector(".custom-point-input");
-  const amount = Number(input.value);
+  if (!input) return; // Ensure input exists
 
   if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
     input.focus();
@@ -1354,15 +1356,15 @@ function toggleCardExpand(card, expand) {
         toggleCardExpand(prevCard, false);
       }
     }
-    if (expandedContent) expandedContent.style.display = "block";
-    if (expandBtn) expandBtn.style.display = "none";
-    if (collapseBtn) collapseBtn.style.display = "block";
+    if (expandedContent) expandedContent.style.display = "block"; // Null check
+    if (expandBtn) expandBtn.style.display = "none"; // Null check
+    if (collapseBtn) collapseBtn.style.display = "block"; // Null check
     card.dataset.expanded = "true";
     expandedCardId = id;
   } else {
-    if (expandedContent) expandedContent.style.display = "none";
-    if (expandBtn) expandBtn.style.display = "block";
-    if (collapseBtn) collapseBtn.style.display = "none";
+    if (expandedContent) expandedContent.style.display = "none"; // Null check
+    if (expandBtn) expandBtn.style.display = "block"; // Null check
+    if (collapseBtn) collapseBtn.style.display = "none"; // Null check
     card.dataset.expanded = "false";
     if (expandedCardId === id) {
       expandedCardId = null;
@@ -1453,7 +1455,7 @@ if (pointsModalOverlay) {
     if (!form || !pointsModalChildId) return;
     event.preventDefault();
 
-    const input = form.querySelector(".custom-point-input--large");
+    const input = form.querySelector(".custom-point-input--large"); // Null check
     if (!input) return;
     const amount = Number(input.value);
 
@@ -1467,13 +1469,14 @@ if (pointsModalOverlay) {
   });
 
   pointsModalOverlay.addEventListener("click", (event) => {
+    // Duplicated event listener, should be moved outside
     const removeCustomBtn = event.target.closest(
       ".btn-point--custom.btn-point--remove",
     );
     if (removeCustomBtn && pointsModalChildId) {
       const form = removeCustomBtn.closest(".custom-point-form--large");
-      if (!form) return;
-      const input = form.querySelector(".custom-point-input--large");
+      if (!form) return; // Null check
+      const input = form.querySelector(".custom-point-input--large"); // Null check
       if (!input) return;
       const amount = Number(input.value);
 
