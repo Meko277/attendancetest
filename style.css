@@ -545,22 +545,6 @@ body.arabic .detail-row {
   }
 }
 
-.child-card.is-expanded {
-  max-height: 600px; /* Animate max-height for expansion */
-}
-
-.child-card.is-expanded .card-collapsed {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-}
-
-.child-card.is-expanded .card-expanded {
-  opacity: 1;
-  max-height: 500px; /* Adjust as needed */
-  transition-delay: 0.15s;
-}
-
 .card-top-actions {
   position: absolute;
   top: 10px;
@@ -1051,47 +1035,19 @@ body.dark .search-input {
   align-items: center;
   width: 100%;
 }
-.expand-btn {
-  font-size: 11px;
-  padding: 5px 12px;
-}
 
 /* Expanded overlay - covers the entire card when expanded */
 .card-expanded {
-  /* display: none; */
-  opacity: 0;
-  max-height: 0;
+  display: none; /* Hidden by default, toggled by JS */
   overflow: hidden;
-  transition:
-    opacity 0.3s ease,
-    max-height 0.4s ease;
   width: 100%;
-  /* position: absolute;
-  background: var(--surface-solid);
-  border-radius: var(--radius-lg);
-  padding: 40px 14px 14px 14px;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  z-index: 1001;
-  overflow-y: auto; */
-}
-
-.collapse-btn {
-  /* position: absolute;
-  top: 8px; */
-  /* left: 8px; */
-  font-size: 11px;
-  padding: 4px 10px;
-  z-index: 20;
 }
 
 .child-details {
   width: 100%;
   margin: 8px 0;
   text-align: left;
-  flex: 1;
-  overflow-y: auto;
+  animation: fade-in 0.3s ease;
 }
 .detail-row {
   display: flex;
@@ -1118,6 +1074,18 @@ body.dark .search-input {
 body.dark .detail-row {
   border-bottom-color: rgba(148, 163, 184, 0.15);
 }
+.expand-btn,
+.collapse-btn {
+  font-size: 11px;
+  padding: 5px 12px;
+  margin-top: 8px;
+}
+
+.collapse-btn {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
 
 /* ==========================================================================
    RESPONSIVE ADJUSTMENTS
