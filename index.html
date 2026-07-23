@@ -524,140 +524,188 @@
 
         <!-- This section is toggled by JS -->
         <div class="card-expanded">
-          <div class="point-controls">
-            <div class="quick-buttons">
-              <button
-                class="btn-point btn-point--remove"
-                data-action="remove"
-                data-amount="5"
-              >
-                −5
-              </button>
-              <button
-                class="btn-point btn-point--remove"
-                data-action="remove"
-                data-amount="10"
-              >
-                −10
-              </button>
-              <button
-                class="btn-point btn-point--remove"
-                data-action="remove"
-                data-amount="50"
-              >
-                −50
-              </button>
-              <button
-                class="btn-point btn-point--add"
-                data-action="add"
-                data-amount="5"
-              >
-                +5
-              </button>
-              <button
-                class="btn-point btn-point--add"
-                data-action="add"
-                data-amount="10"
-              >
-                +10
-              </button>
-              <button
-                class="btn-point btn-point--add"
-                data-action="add"
-                data-amount="50"
-              >
-                +50
-              </button>
-            </div>
-            <form class="custom-point-form">
-              <input
-                type="number"
-                class="custom-point-input"
-                placeholder="Custom amount"
-                aria-label="Custom point amount"
-              />
-              <div class="custom-point-actions">
+          <div class="card-expanded-content">
+            <div class="point-controls">
+              <div class="quick-buttons">
                 <button
-                  type="submit"
-                  class="btn-point btn-point--custom btn-point--add"
+                  class="btn-point btn-point--remove"
+                  data-action="remove"
+                  data-amount="5"
                 >
-                  Add
+                  −5
                 </button>
                 <button
-                  type="button"
-                  class="btn-point btn-point--custom btn-point--remove"
+                  class="btn-point btn-point--remove"
                   data-action="remove"
+                  data-amount="10"
                 >
-                  Remove
+                  −10
+                </button>
+                <button
+                  class="btn-point btn-point--remove"
+                  data-action="remove"
+                  data-amount="50"
+                >
+                  −50
+                </button>
+                <button
+                  class="btn-point btn-point--add"
+                  data-action="add"
+                  data-amount="5"
+                >
+                  +5
+                </button>
+                <button
+                  class="btn-point btn-point--add"
+                  data-action="add"
+                  data-amount="10"
+                >
+                  +10
+                </button>
+                <button
+                  class="btn-point btn-point--add"
+                  data-action="add"
+                  data-amount="50"
+                >
+                  +50
                 </button>
               </div>
-            </form>
-          </div>
+              <form class="custom-point-form">
+                <input
+                  type="number"
+                  class="custom-point-input"
+                  placeholder="Custom amount"
+                  aria-label="Custom point amount"
+                />
+                <div class="custom-point-actions">
+                  <button
+                    type="submit"
+                    class="btn-point btn-point--custom btn-point--add"
+                  >
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-point btn-point--custom btn-point--remove"
+                    data-action="remove"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </form>
+            </div>
 
-          <div class="child-details">
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="addressLabel">Address:</span>
-              <span class="detail-value child-address"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="phoneLabel">Phone:</span>
-              <span class="detail-value child-phone"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="schoolLabel">School:</span>
-              <span class="detail-value child-school"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="talentLabel">Talent/Sport:</span>
-              <span class="detail-value child-talent"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="fathersConfessionLabel">Father's confession:</span>
-              <span class="detail-value child-father-confession"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="inScoutLabel">In Scout:</span>
-              <span class="detail-value child-in-scout"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="fathersJobLabel">Father's job:</span>
-              <span class="detail-value child-father-job"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="fathersPhoneLabel">Father's phone:</span>
-              <span class="detail-value child-father-phone"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="fathersFathersConfessionLabel">Father's father's confession:</span>
-              <span class="detail-value child-father-father-confession"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="churchLabel">Church:</span>
-              <span class="detail-value child-church"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="mothersNameLabel">Mother's name:</span>
-              <span class="detail-value child-mother-name"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="mothersPhoneLabel">Mother's phone:</span>
-              <span class="detail-value child-mother-phone"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="mothersJobLabel">Mother's job:</span>
-              <span class="detail-value child-mother-job"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="mothersFathersConfessionLabel">Mother's father's confession:</span>
-              <span class="detail-value child-mother-father-confession"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="siblingsLabel">Siblings:</span>
-              <span class="detail-value child-siblings"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label" data-translate-key="notesLabel">Notes:</span>
-              <span class="detail-value child-notes"></span>
+            <div class="child-details">
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="addressLabel"
+                  >Address:</span
+                >
+                <span class="detail-value child-address"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="phoneLabel"
+                  >Phone:</span
+                >
+                <span class="detail-value child-phone"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="schoolLabel"
+                  >School:</span
+                >
+                <span class="detail-value child-school"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="talentLabel"
+                  >Talent/Sport:</span
+                >
+                <span class="detail-value child-talent"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="fathersConfessionLabel"
+                  >Father's confession:</span
+                >
+                <span class="detail-value child-father-confession"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="inScoutLabel"
+                  >In Scout:</span
+                >
+                <span class="detail-value child-in-scout"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="fathersJobLabel"
+                  >Father's job:</span
+                >
+                <span class="detail-value child-father-job"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="fathersPhoneLabel"
+                  >Father's phone:</span
+                >
+                <span class="detail-value child-father-phone"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="fathersFathersConfessionLabel"
+                  >Father's father's confession:</span
+                >
+                <span
+                  class="detail-value child-father-father-confession"
+                ></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="churchLabel"
+                  >Church:</span
+                >
+                <span class="detail-value child-church"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="mothersNameLabel"
+                  >Mother's name:</span
+                >
+                <span class="detail-value child-mother-name"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="mothersPhoneLabel"
+                  >Mother's phone:</span
+                >
+                <span class="detail-value child-mother-phone"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="mothersJobLabel"
+                  >Mother's job:</span
+                >
+                <span class="detail-value child-mother-job"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="mothersFathersConfessionLabel"
+                  >Mother's father's confession:</span
+                >
+                <span
+                  class="detail-value child-mother-father-confession"
+                ></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="siblingsLabel"
+                  >Siblings:</span
+                >
+                <span class="detail-value child-siblings"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="notesLabel"
+                  >Notes:</span
+                >
+                <span class="detail-value child-notes"></span>
+              </div>
             </div>
           </div>
         </div>
