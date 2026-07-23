@@ -27,7 +27,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
 
 // vvvvvvvvvvvvvvvvvvvvvv  PASTE YOUR FIREBASE CONFIG HERE  vvvvvvvvvvvvvvvvvvvvvv
 export const firebaseConfig = {
-  apiKey: "AIzaSyD4ENSYFjyTA1N5gBleUMVTOJsP2i4EnmU", // ❗ Replace with your actual API key
+  apiKey: "AIzaSyD4ENSYFjyTA1N5gBleUMVTOJsP2i4EnmU", // ❗ PASTE YOUR FIREBASE API KEY HERE
   authDomain: "attendance-765b1.firebaseapp.com",
   projectId: "attendance-765b1",
   storageBucket: "attendance-765b1.firebasestorage.app",
@@ -53,7 +53,8 @@ try {
     const errorEl = document.getElementById("configError");
     if (errorEl) {
       errorEl.classList.remove("hidden");
-      errorEl.querySelector("p").textContent = "Firebase initialization failed: " + error.message;
+      errorEl.querySelector("p").textContent =
+        "Firebase initialization failed: " + error.message;
     }
   });
 }
@@ -133,7 +134,9 @@ const pointsModalGrade = document.getElementById("pointsModalGrade");
 const pointsModalRank = document.getElementById("pointsModalRank");
 const pointsModalValue = document.getElementById("pointsModalValue");
 const pointsModalRingFill = document.querySelector(".ring-fill--large");
-const pointsModalAvatarInitials = document.querySelector(".avatar-initials--large");
+const pointsModalAvatarInitials = document.querySelector(
+  ".avatar-initials--large",
+);
 const pointsModalRankBadge = document.querySelector(".rank-badge--large");
 
 // Form fields
@@ -149,11 +152,15 @@ const fieldFatherConfession = document.getElementById("fieldFatherConfession");
 const fieldInScout = document.getElementById("fieldInScout");
 const fieldFatherJob = document.getElementById("fieldFatherJob");
 const fieldFatherPhone = document.getElementById("fieldFatherPhone");
-const fieldFatherFatherConfession = document.getElementById("fieldFatherFatherConfession");
+const fieldFatherFatherConfession = document.getElementById(
+  "fieldFatherFatherConfession",
+);
 const fieldChurch = document.getElementById("fieldChurch");
 const fieldMotherName = document.getElementById("fieldMotherName");
 const fieldMotherJob = document.getElementById("fieldMotherJob");
-const fieldMotherFatherConfession = document.getElementById("fieldMotherFatherConfession");
+const fieldMotherFatherConfession = document.getElementById(
+  "fieldMotherFatherConfession",
+);
 const fieldSiblingsCount = document.getElementById("fieldSiblingsCount");
 const fieldSiblingsNames = document.getElementById("fieldSiblingsNames");
 const fieldSiblingsDob = document.getElementById("fieldSiblingsDob");
@@ -196,7 +203,8 @@ const translations = {
     sixth: "6th",
     // Empty state
     noStars: "No stars on the board yet",
-    addFirstChild: "Add your first child to start tracking attendance and rewards.",
+    addFirstChild:
+      "Add your first child to start tracking attendance and rewards.",
     addChildBtn: "+ Add a child",
     // Modal
     addChildTitle: "Add a child",
@@ -344,7 +352,7 @@ const translations = {
     yes: "نعم",
     no: "لا",
     selectGrade: "اختر الصف",
-  }
+  },
 };
 
 let currentLanguage = "en";
@@ -354,36 +362,43 @@ function applyLanguage(lang) {
   document.body.classList.toggle("arabic", lang === "ar");
   document.body.lang = lang;
   localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
-  
+
   // Update language toggle button
   const langToggleBtn = document.getElementById("languageToggleBtn");
   if (langToggleBtn) {
     const label = langToggleBtn.querySelector(".language-toggle__label");
     if (label) label.textContent = lang === "en" ? "AR" : "EN";
   }
-  
+
   // Update all translatable elements
   updateTranslations();
 }
 
 function updateTranslations() {
   const t = translations[currentLanguage];
-  
+
   // Update header
   const brandTitle = document.querySelector(".brand-text h1");
   const brandSubtitle = document.querySelector(".brand-text p");
   if (brandTitle) brandTitle.textContent = t.brandTitle;
   if (brandSubtitle) brandSubtitle.textContent = t.brandSubtitle;
-  
+
   // Update grade filter buttons
-  document.querySelector('.grade-filter-btn[data-grade="all"]')?.textContent = t.all;
-  document.querySelector('.grade-filter-btn[data-grade="4th grade"]')?.textContent = t.fourth;
-  document.querySelector('.grade-filter-btn[data-grade="5th grade"]')?.textContent = t.fifth;
-  document.querySelector('.grade-filter-btn[data-grade="6th grade"]')?.textContent = t.sixth;
-  
+  document.querySelector('.grade-filter-btn[data-grade="all"]')?.textContent =
+    t.all;
+  document.querySelector(
+    '.grade-filter-btn[data-grade="4th grade"]',
+  )?.textContent = t.fourth;
+  document.querySelector(
+    '.grade-filter-btn[data-grade="5th grade"]',
+  )?.textContent = t.fifth;
+  document.querySelector(
+    '.grade-filter-btn[data-grade="6th grade"]',
+  )?.textContent = t.sixth;
+
   // Update search placeholder
   if (searchInput) searchInput.placeholder = t.searchPlaceholder;
-  
+
   // Update empty state
   const emptyH2 = document.querySelector("#emptyState h2");
   const emptyP = document.querySelector("#emptyState p");
@@ -391,7 +406,7 @@ function updateTranslations() {
   if (emptyH2) emptyH2.textContent = t.noStars;
   if (emptyP) emptyP.textContent = t.addFirstChild;
   if (emptyBtn) emptyBtn.textContent = t.addChildBtn;
-  
+
   // Update modal title
   if (modalTitle) {
     if (editingChildId) {
@@ -400,42 +415,64 @@ function updateTranslations() {
       modalTitle.textContent = t.addChildTitle;
     }
   }
-  
+
   // Update field labels
   document.querySelector('label[for="fieldName"] span')?.textContent = t.name;
-  document.querySelector('label[for="fieldDob"] span')?.textContent = t.dateOfBirth;
+  document.querySelector('label[for="fieldDob"] span')?.textContent =
+    t.dateOfBirth;
   document.querySelector('label[for="fieldGrade"] span')?.textContent = t.grade;
-  document.querySelector('label[for="fieldAddress"] span')?.textContent = t.address;
-  document.querySelector('label[for="fieldPhone"] span')?.textContent = t.phoneNumber;
-  document.querySelector('label[for="fieldMotherPhone"] span')?.textContent = t.mothersPhone;
-  document.querySelector('label[for="fieldSchool"] span')?.textContent = t.schoolName;
-  document.querySelector('label[for="fieldTalent"] span')?.textContent = t.talent;
-  document.querySelector('label[for="fieldFatherConfession"] span')?.textContent = t.fathersConfession;
-  document.querySelector('label[for="fieldInScout"] span')?.textContent = t.inScout;
-  document.querySelector('label[for="fieldFatherJob"] span')?.textContent = t.fathersJob;
-  document.querySelector('label[for="fieldFatherPhone"] span')?.textContent = t.fathersPhone;
-  document.querySelector('label[for="fieldFatherFatherConfession"] span')?.textContent = t.fathersFathersConfession;
-  document.querySelector('label[for="fieldChurch"] span')?.textContent = t.church;
-  document.querySelector('label[for="fieldMotherName"] span')?.textContent = t.mothersName;
-  document.querySelector('label[for="fieldMotherJob"] span')?.textContent = t.mothersJob;
-  document.querySelector('label[for="fieldMotherFatherConfession"] span')?.textContent = t.mothersFathersConfession;
-  document.querySelector('label[for="fieldSiblingsCount"] span')?.textContent = t.siblingsCount;
-  document.querySelector('label[for="fieldSiblingsNames"] span')?.textContent = t.siblingsNames;
-  document.querySelector('label[for="fieldSiblingsDob"] span')?.textContent = t.siblingsDob;
+  document.querySelector('label[for="fieldAddress"] span')?.textContent =
+    t.address;
+  document.querySelector('label[for="fieldPhone"] span')?.textContent =
+    t.phoneNumber;
+  document.querySelector('label[for="fieldMotherPhone"] span')?.textContent =
+    t.mothersPhone;
+  document.querySelector('label[for="fieldSchool"] span')?.textContent =
+    t.schoolName;
+  document.querySelector('label[for="fieldTalent"] span')?.textContent =
+    t.talent;
+  document.querySelector(
+    'label[for="fieldFatherConfession"] span',
+  )?.textContent = t.fathersConfession;
+  document.querySelector('label[for="fieldInScout"] span')?.textContent =
+    t.inScout;
+  document.querySelector('label[for="fieldFatherJob"] span')?.textContent =
+    t.fathersJob;
+  document.querySelector('label[for="fieldFatherPhone"] span')?.textContent =
+    t.fathersPhone;
+  document.querySelector(
+    'label[for="fieldFatherFatherConfession"] span',
+  )?.textContent = t.fathersFathersConfession;
+  document.querySelector('label[for="fieldChurch"] span')?.textContent =
+    t.church;
+  document.querySelector('label[for="fieldMotherName"] span')?.textContent =
+    t.mothersName;
+  document.querySelector('label[for="fieldMotherJob"] span')?.textContent =
+    t.mothersJob;
+  document.querySelector(
+    'label[for="fieldMotherFatherConfession"] span',
+  )?.textContent = t.mothersFathersConfession;
+  document.querySelector('label[for="fieldSiblingsCount"] span')?.textContent =
+    t.siblingsCount;
+  document.querySelector('label[for="fieldSiblingsNames"] span')?.textContent =
+    t.siblingsNames;
+  document.querySelector('label[for="fieldSiblingsDob"] span')?.textContent =
+    t.siblingsDob;
   document.querySelector('label[for="fieldNotes"] span')?.textContent = t.notes;
-  
+
   // Update buttons
   const saveBtn = document.getElementById("saveChildBtn");
   const cancelBtn = document.getElementById("cancelModalBtn");
-  if (saveBtn) saveBtn.textContent = editingChildId ? t.saveChanges : t.saveChild;
+  if (saveBtn)
+    saveBtn.textContent = editingChildId ? t.saveChanges : t.saveChild;
   if (cancelBtn) cancelBtn.textContent = t.cancel;
-  
+
   // Update delete modal
   const deleteH2 = document.querySelector("#deleteModalOverlay h2");
   const deleteP = document.querySelector("#deleteModalText");
   if (deleteH2) deleteH2.textContent = t.removeChild;
   if (deleteP) deleteP.textContent = t.deleteWarning;
-  
+
   // Update grade options
   const gradeOptions = document.querySelectorAll("#fieldGrade option");
   gradeOptions[0].textContent = t.selectGrade;
@@ -496,17 +533,17 @@ const childrenDataById = new Map();
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initLanguage();
-  
+
   // Set initial connection status
   setConnectionStatus("connecting");
-  
+
   // Set a timeout to show error if connection takes too long
   let connectionTimeout = setTimeout(() => {
     if (!connectionStatus.classList.contains("is-live")) {
       setConnectionStatus("error");
     }
   }, 10000); // 10 seconds timeout
-  
+
   // Theme toggle event handler
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", () => {
@@ -516,7 +553,7 @@ document.addEventListener("DOMContentLoaded", () => {
       applyTheme(nextTheme);
     });
   }
-  
+
   // Language toggle event handler
   const languageToggleBtn = document.getElementById("languageToggleBtn");
   if (languageToggleBtn) {
@@ -525,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
       applyLanguage(nextLang);
     });
   }
-  
+
   // Grade filter event handlers
   const gradeFilterButtons = document.querySelectorAll(".grade-filter-btn");
   const gradeExportContainer = document.getElementById("gradeExportContainer");
@@ -536,10 +573,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update active state
       gradeFilterButtons.forEach((b) => b.classList.remove("is-active"));
       btn.classList.add("is-active");
-      
+
       // Set the filter
       gradeFilter = btn.dataset.grade;
-      
+
       // Show export button only for specific grades (not "all")
       if (gradeFilter !== "all") {
         gradeExportContainer.classList.remove("hidden");
@@ -547,14 +584,16 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         gradeExportContainer.classList.add("hidden");
       }
-      
+
       // Apply filters
       filterChildren();
     });
   });
 
   // Set "All" as active by default
-  document.querySelector('.grade-filter-btn[data-grade="all"]')?.classList.add("is-active");
+  document
+    .querySelector('.grade-filter-btn[data-grade="all"]')
+    ?.classList.add("is-active");
 
   // Grade export button event handler
   if (gradeExportBtn) {
@@ -563,7 +602,7 @@ document.addEventListener("DOMContentLoaded", () => {
       exportGradeToPDF(grade);
     });
   }
-  
+
   // Add child button event handlers
   if (openAddModalBtn) {
     openAddModalBtn.addEventListener("click", openAddModal);
@@ -571,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (emptyStateAddBtn) {
     emptyStateAddBtn.addEventListener("click", openAddModal);
   }
-  
+
   // Modal event handlers
   if (cancelModalBtn) {
     cancelModalBtn.addEventListener("click", closeChildModal);
@@ -581,7 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.target === childModalOverlay) closeChildModal();
     });
   }
-  
+
   // Delete modal event handlers
   if (cancelDeleteBtn) {
     cancelDeleteBtn.addEventListener("click", closeDeleteModal);
@@ -603,7 +642,7 @@ document.addEventListener("DOMContentLoaded", () => {
       closeDeleteModal();
     });
   }
-  
+
   // Form submit handler
   if (childForm) {
     childForm.addEventListener("submit", async (event) => {
@@ -633,7 +672,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // The `required` attribute on the inputs prevents most invalid states, but this is a good safeguard.
       if (!name || !dob) {
-        formError.textContent = "Please fill in a valid name and date of birth.";
+        formError.textContent =
+          "Please fill in a valid name and date of birth.";
         formError.classList.remove("hidden");
         return;
       }
@@ -643,19 +683,53 @@ document.addEventListener("DOMContentLoaded", () => {
         if (editingChildId) {
           // Editing an existing child: keep their points untouched, update the rest
           await updateDoc(doc(db, "children", editingChildId), {
-            name, dob, grade, address, phone, motherPhone, school, talent,
-            fatherConfession, inScout, fatherJob, fatherPhone, fatherFatherConfession,
-            church, motherName, motherJob, motherFatherConfession, siblingsCount,
-            siblingsNames, siblingsDob, notes
+            name,
+            dob,
+            grade,
+            address,
+            phone,
+            motherPhone,
+            school,
+            talent,
+            fatherConfession,
+            inScout,
+            fatherJob,
+            fatherPhone,
+            fatherFatherConfession,
+            church,
+            motherName,
+            motherJob,
+            motherFatherConfession,
+            siblingsCount,
+            siblingsNames,
+            siblingsDob,
+            notes,
           });
           showToast(`${name}'s details were updated`);
         } else {
           // Adding a brand-new child, starting at 0 points
           await addDoc(childrenCollection, {
-            name, dob, grade, address, phone, motherPhone, school, talent,
-            fatherConfession, inScout, fatherJob, fatherPhone, fatherFatherConfession,
-            church, motherName, motherJob, motherFatherConfession, siblingsCount,
-            siblingsNames, siblingsDob, notes,
+            name,
+            dob,
+            grade,
+            address,
+            phone,
+            motherPhone,
+            school,
+            talent,
+            fatherConfession,
+            inScout,
+            fatherJob,
+            fatherPhone,
+            fatherFatherConfession,
+            church,
+            motherName,
+            motherJob,
+            motherFatherConfession,
+            siblingsCount,
+            siblingsNames,
+            siblingsDob,
+            notes,
             points: 0,
             createdAt: serverTimestamp(),
           });
@@ -672,7 +746,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-  
+
   // Card click event delegation
   if (childGrid) {
     childGrid.addEventListener("click", (event) => {
@@ -687,7 +761,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // If card is already expanded and clicking on the overlay background, close it
-      if (card.classList.contains("is-expanded") && !event.target.closest(".child-details") && !event.target.closest(".point-controls") && !event.target.closest(".card-top-actions")) {
+      if (
+        card.classList.contains("is-expanded") &&
+        !event.target.closest(".child-details") &&
+        !event.target.closest(".point-controls") &&
+        !event.target.closest(".card-top-actions")
+      ) {
         toggleCardExpand(card, false);
         return;
       }
@@ -765,7 +844,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Click on points display to open points modal
-      if (event.target.closest(".points-display") && !card.classList.contains("is-expanded")) {
+      if (
+        event.target.closest(".points-display") &&
+        !card.classList.contains("is-expanded")
+      ) {
         openPointsModal(id, {
           name: card.dataset.name || "",
           grade: card.dataset.grade || "",
@@ -799,7 +881,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.value = "";
     });
   }
-  
+
   // Start Firestore listener after DOM is ready
   startFirestoreListener();
 });
@@ -820,7 +902,7 @@ async function updateChildPoints(id, amount, action = "add") {
 // Firestore real-time listener
 function startFirestoreListener() {
   console.log("Starting Firestore listener...");
-  
+
   // Check if Firebase is initialized
   if (!db || !childrenCollection) {
     console.error("Firebase not initialized - check your config");
@@ -828,7 +910,7 @@ function startFirestoreListener() {
     showToast("Firebase not configured. Check app.js for errors.");
     return;
   }
-  
+
   onSnapshot(
     childrenCollection,
     (snapshot) => {
@@ -871,7 +953,7 @@ function startFirestoreListener() {
 
       // Sort cards by points (highest first)
       sortCardsByPoints();
-      
+
       updateEmptyState();
       filterChildren(); // Apply search filter after updates
     },
@@ -886,13 +968,15 @@ function startFirestoreListener() {
 // PDF export function
 function exportGradeToPDF(grade) {
   // Get all cards for this grade
-  const cards = Array.from(cardElementsById.values()).filter(card => card.dataset.grade === grade);
-  
+  const cards = Array.from(cardElementsById.values()).filter(
+    (card) => card.dataset.grade === grade,
+  );
+
   if (cards.length === 0) {
     showToast(`No children found in ${grade}`);
     return;
   }
-  
+
   // Create HTML table for PDF export
   const t = translations[currentLanguage];
   let htmlContent = `
@@ -902,10 +986,10 @@ function exportGradeToPDF(grade) {
       <meta charset="UTF-8">
       <title>${t.export} - ${grade}</title>
       <style>
-        body { font-family: Arial, sans-serif; margin: 20px; direction: ${currentLanguage === 'ar' ? 'rtl' : 'ltr'}; }
+        body { font-family: Arial, sans-serif; margin: 20px; direction: ${currentLanguage === "ar" ? "rtl" : "ltr"}; }
         h1 { text-align: center; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: ${currentLanguage === 'ar' ? 'right' : 'left'}; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: ${currentLanguage === "ar" ? "right" : "left"}; }
         th { background-color: #4ecdc4; color: white; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         .header { margin-bottom: 20px; }
@@ -926,15 +1010,15 @@ function exportGradeToPDF(grade) {
         </thead>
         <tbody>
   `;
-  
-  cards.forEach(card => {
+
+  cards.forEach((card) => {
     const name = card.dataset.name || "";
     const points = card.querySelector(".points-number")?.textContent || "0";
     const address = card.dataset.address || "";
     const phone = card.dataset.phone || card.dataset.motherPhone || "";
     const school = card.dataset.school || "";
     const talent = card.dataset.talent || "";
-    
+
     htmlContent += `
       <tr>
         <td>${name}</td>
@@ -946,26 +1030,26 @@ function exportGradeToPDF(grade) {
       </tr>
     `;
   });
-  
+
   htmlContent += `
         </tbody>
       </table>
     </body>
     </html>
   `;
-  
+
   // Create a new window and print it as PDF
-  const printWindow = window.open('', '_blank');
+  const printWindow = window.open("", "_blank");
   printWindow.document.write(htmlContent);
   printWindow.document.close();
   printWindow.focus();
-  
+
   // Trigger print dialog after a short delay
   setTimeout(() => {
     printWindow.print();
     printWindow.close();
   }, 500);
-  
+
   showToast(`Exporting ${cards.length} children to PDF...`);
 }
 
@@ -1077,13 +1161,18 @@ function filterChildren() {
     const grade = (card.dataset.grade || "").toLowerCase();
     const school = (card.dataset.school || "").toLowerCase();
     const talent = (card.dataset.talent || "").toLowerCase();
-    
+
     // Check search query match
-    const matchesQuery = name.includes(query) || grade.includes(query) || school.includes(query) || talent.includes(query);
-    
+    const matchesQuery =
+      name.includes(query) ||
+      grade.includes(query) ||
+      school.includes(query) ||
+      talent.includes(query);
+
     // Check grade filter match
-    const matchesGrade = gradeFilter === "all" || card.dataset.grade === gradeFilter;
-    
+    const matchesGrade =
+      gradeFilter === "all" || card.dataset.grade === gradeFilter;
+
     // Show card only if both filters pass
     card.classList.toggle("hidden", !(matchesQuery && matchesGrade));
   });
@@ -1143,36 +1232,58 @@ function applyCardData(card, data, { isNew = false } = {}) {
     data.name || "?",
   );
   // Update all .child-name elements (both collapsed and expanded views)
-  card.querySelectorAll(".child-name").forEach(el => el.textContent = data.name || "Unnamed");
+  card
+    .querySelectorAll(".child-name")
+    .forEach((el) => (el.textContent = data.name || "Unnamed"));
   // Update all .child-grade elements (both collapsed and expanded views)
-  card.querySelectorAll(".child-grade").forEach(el => el.textContent = data.grade || "No grade set");
+  card
+    .querySelectorAll(".child-grade")
+    .forEach((el) => (el.textContent = data.grade || "No grade set"));
   // Update all .child-meta elements (both collapsed and expanded views)
-  card.querySelectorAll(".child-meta").forEach(el => el.textContent = `Age ${age ?? "?"} · Born ${formatDob(data.dob)}`);
+  card
+    .querySelectorAll(".child-meta")
+    .forEach(
+      (el) =>
+        (el.textContent = `Age ${age ?? "?"} · Born ${formatDob(data.dob)}`),
+    );
   // Update all .rank-name elements (both collapsed and expanded views)
-  card.querySelectorAll(".rank-name").forEach(el => el.textContent = tier.name);
+  card
+    .querySelectorAll(".rank-name")
+    .forEach((el) => (el.textContent = tier.name));
 
   // Update detail values
   card.querySelector(".child-address").textContent = data.address || "—";
-  card.querySelector(".child-phone").textContent = data.phone || data.motherPhone || "—";
+  card.querySelector(".child-phone").textContent =
+    data.phone || data.motherPhone || "—";
   card.querySelector(".child-school").textContent = data.school || "—";
   card.querySelector(".child-talent").textContent = data.talent || "—";
-  card.querySelector(".child-father-confession").textContent = data.fatherConfession === "yes" ? "Yes" : "No";
-  card.querySelector(".child-in-scout").textContent = data.inScout === "yes" ? "Yes" : "No";
+  card.querySelector(".child-father-confession").textContent =
+    data.fatherConfession === "yes" ? "Yes" : "No";
+  card.querySelector(".child-in-scout").textContent =
+    data.inScout === "yes" ? "Yes" : "No";
   card.querySelector(".child-father-job").textContent = data.fatherJob || "—";
-  card.querySelector(".child-father-phone").textContent = data.fatherPhone || "—";
-  card.querySelector(".child-father-father-confession").textContent = data.fatherFatherConfession === "yes" ? "Yes" : "No";
+  card.querySelector(".child-father-phone").textContent =
+    data.fatherPhone || "—";
+  card.querySelector(".child-father-father-confession").textContent =
+    data.fatherFatherConfession === "yes" ? "Yes" : "No";
   card.querySelector(".child-church").textContent = data.church || "—";
   card.querySelector(".child-mother-name").textContent = data.motherName || "—";
-  card.querySelector(".child-mother-phone").textContent = data.motherPhone || "—";
+  card.querySelector(".child-mother-phone").textContent =
+    data.motherPhone || "—";
   card.querySelector(".child-mother-job").textContent = data.motherJob || "—";
-  card.querySelector(".child-mother-father-confession").textContent = data.motherFatherConfession === "yes" ? "Yes" : "No";
-  
+  card.querySelector(".child-mother-father-confession").textContent =
+    data.motherFatherConfession === "yes" ? "Yes" : "No";
+
   // Format siblings info
   let siblingsText = "—";
   if (data.siblingsCount && data.siblingsCount > 0) {
-    const names = data.siblingsNames ? data.siblingsNames.split("\n").filter(n => n.trim()) : [];
-    const dobs = data.siblingsDob ? data.siblingsDob.split("\n").filter(d => d.trim()) : [];
-    siblingsText = `${data.siblingsCount} sibling${data.siblingsCount > 1 ? 's' : ''}`;
+    const names = data.siblingsNames
+      ? data.siblingsNames.split("\n").filter((n) => n.trim())
+      : [];
+    const dobs = data.siblingsDob
+      ? data.siblingsDob.split("\n").filter((d) => d.trim())
+      : [];
+    siblingsText = `${data.siblingsCount} sibling${data.siblingsCount > 1 ? "s" : ""}`;
     if (names.length > 0) {
       siblingsText += `: ${names.join(", ")}`;
     }
@@ -1198,10 +1309,10 @@ function applyCardData(card, data, { isNew = false } = {}) {
     : points;
 
   if (isNew) {
-    pointsNumberEls.forEach(el => el.textContent = points);
+    pointsNumberEls.forEach((el) => (el.textContent = points));
   } else if (previousPoints !== points) {
     // Animate all points number elements
-    pointsNumberEls.forEach(el => {
+    pointsNumberEls.forEach((el) => {
       animateNumber(el, previousPoints, points);
       replayAnimation(el, "is-popping", 450);
     });
@@ -1228,9 +1339,9 @@ function sortCardsByPoints() {
     const pointsB = Number(b.querySelector(".points-number")?.textContent || 0);
     return pointsB - pointsA; // Descending order (highest first)
   });
-  
+
   // Re-append cards in sorted order
-  cards.forEach(card => childGrid.appendChild(card));
+  cards.forEach((card) => childGrid.appendChild(card));
 }
 
 function setConnectionStatus(state) {
@@ -1328,7 +1439,7 @@ let expandedCardId = null;
 
 function toggleCardExpand(card, expand) {
   const id = card.dataset.id;
-  
+
   if (expand) {
     // If another card is expanded, collapse it first
     if (expandedCardId && expandedCardId !== id) {
@@ -1336,7 +1447,7 @@ function toggleCardExpand(card, expand) {
       if (prevCard) {
         toggleCardExpand(prevCard, false);
       }
-    }    
+    }
     card.classList.add("is-expanded");
     expandedCardId = id;
   } else {
@@ -1354,37 +1465,40 @@ let pointsModalChildId = null;
 
 function openPointsModal(id, data) {
   pointsModalChildId = id;
-  
+
   // Update modal content
   if (pointsModalName) pointsModalName.textContent = data.name || "Unnamed";
-  if (pointsModalGrade) pointsModalGrade.textContent = data.grade || "No grade set";
-  
+  if (pointsModalGrade)
+    pointsModalGrade.textContent = data.grade || "No grade set";
+
   const points = data.points || 0;
   const tier = getTier(points);
   const progress = getRingProgress(points, tier);
-  
+
   if (pointsModalRank) {
     pointsModalRank.textContent = tier.name;
   }
-  
+
   if (pointsModalValue) {
     pointsModalValue.textContent = points;
   }
-  
+
   if (pointsModalAvatarInitials) {
     pointsModalAvatarInitials.textContent = getInitials(data.name || "?");
   }
-  
+
   if (pointsModalRankBadge) {
     pointsModalRankBadge.textContent = tier.emoji;
     pointsModalRankBadge.title = tier.name;
   }
-  
+
   if (pointsModalRingFill) {
-    pointsModalRingFill.style.strokeDashoffset = String(RING_CIRCUMFERENCE * (1 - progress));
+    pointsModalRingFill.style.strokeDashoffset = String(
+      RING_CIRCUMFERENCE * (1 - progress),
+    );
     pointsModalRingFill.style.stroke = tier.color;
   }
-  
+
   // Show the modal (backdrop-filter on overlay handles the blur)
   if (pointsModalOverlay) {
     pointsModalOverlay.classList.remove("hidden");
@@ -1412,43 +1526,47 @@ if (pointsModalOverlay) {
 // Points modal point buttons
 if (pointsModalOverlay) {
   pointsModalOverlay.addEventListener("click", (event) => {
-    const pointButton = event.target.closest(".btn-point:not(.btn-point--custom)");
+    const pointButton = event.target.closest(
+      ".btn-point:not(.btn-point--custom)",
+    );
     if (pointButton && pointsModalChildId) {
       const amount = Number(pointButton.dataset.amount);
       const action = pointButton.dataset.action || "add";
       updateChildPoints(pointsModalChildId, amount, action);
     }
   });
-  
+
   pointsModalOverlay.addEventListener("submit", (event) => {
     const form = event.target.closest(".custom-point-form--large");
     if (!form || !pointsModalChildId) return;
     event.preventDefault();
-    
+
     const input = form.querySelector(".custom-point-input--large");
     const amount = Number(input?.value);
-    
+
     if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
       input?.focus();
       return;
     }
-    
+
     updateChildPoints(pointsModalChildId, amount, "add");
     input.value = "";
   });
-  
+
   pointsModalOverlay.addEventListener("click", (event) => {
-    const removeCustomBtn = event.target.closest(".btn-point--custom.btn-point--remove");
+    const removeCustomBtn = event.target.closest(
+      ".btn-point--custom.btn-point--remove",
+    );
     if (removeCustomBtn && pointsModalChildId) {
       const form = removeCustomBtn.closest(".custom-point-form--large");
       const input = form?.querySelector(".custom-point-input--large");
       const amount = Number(input?.value);
-      
+
       if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
         input?.focus();
         return;
       }
-      
+
       updateChildPoints(pointsModalChildId, amount, "remove");
       input.value = "";
     }
