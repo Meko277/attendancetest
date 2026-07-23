@@ -43,8 +43,8 @@
             class="brand-badge"
           />
           <div class="brand-text">
-            <h1 data-translate-key="brandTitle">St.George Church</h1>
-            <p data-translate-key="brandSubtitle">Attendance & reward board</p>
+            <h1>St.George Church</h1>
+            <p>Attendance & reward board</p>
           </div>
         </div>
 
@@ -54,7 +54,6 @@
               type="button"
               class="btn btn-ghost grade-filter-btn"
               data-grade="all"
-              data-translate-key="all"
             >
               All
             </button>
@@ -62,7 +61,6 @@
               type="button"
               class="btn btn-ghost grade-filter-btn"
               data-grade="4th grade"
-              data-translate-key="fourth"
             >
               4th
             </button>
@@ -70,7 +68,6 @@
               type="button"
               class="btn btn-ghost grade-filter-btn"
               data-grade="5th grade"
-              data-translate-key="fifth"
             >
               5th
             </button>
@@ -78,7 +75,6 @@
               type="button"
               class="btn btn-ghost grade-filter-btn"
               data-grade="6th grade"
-              data-translate-key="sixth"
             >
               6th
             </button>
@@ -91,7 +87,7 @@
               title="Export grade to file"
             >
               <span class="export-icon" aria-hidden="true">📊</span>
-              <span class="export-label" data-translate-key="export">Export</span>
+              <span class="export-label">Export</span>
             </button>
           </div>
           <div class="search-container">
@@ -125,8 +121,7 @@
             <span class="language-toggle__label">AR</span>
           </button>
           <button id="openAddModalBtn" class="btn btn-primary btn-add">
-            <span class="plus-icon">+</span>
-            <span data-translate-key="addChild">Add child</span>
+            <span class="plus-icon">+</span> Add child
           </button>
         </div>
       </header>
@@ -142,15 +137,10 @@
         <!-- Shown only when there are no children yet -->
         <section id="emptyState" class="empty-state hidden">
           <div class="empty-emoji">🌟</div>
-          <h2 data-translate-key="noStars">No stars on the board yet</h2>
-          <p data-translate-key="addFirstChild">
-            Add your first child to start tracking attendance and rewards.
-          </p>
+          <h2>No stars on the board yet</h2>
+          <p>Add your first child to start tracking attendance and rewards.</p>
           <button class="btn btn-primary" id="emptyStateAddBtn">
-            +
-            <span data-translate-key="addChildBtn"
-              >Add a child</span
-            >
+            + Add a child
           </button>
         </section>
 
@@ -165,11 +155,11 @@
     <!-- ============ ADD / EDIT MODAL ============ -->
     <div id="childModalOverlay" class="modal-overlay hidden">
       <form id="childForm" class="modal-card" novalidate>
-        <h2 id="modalTitle" data-translate-key="addChildTitle">Add a child</h2>
+        <h2 id="modalTitle">Add a child</h2>
 
         <div class="modal-form-scroll">
           <label class="field">
-            <span data-translate-key="name">Name</span>
+            <span>Name</span>
             <input
               type="text"
               id="fieldName"
@@ -179,12 +169,12 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="dateOfBirth">Date of birth</span>
+            <span>Date of birth</span>
             <input type="date" id="fieldDob" required />
           </label>
 
           <label class="field">
-            <span data-translate-key="grade">Grade</span>
+            <span>Grade</span>
             <select id="fieldGrade">
               <option value="">Select grade</option>
               <option value="4th grade">4th grade</option>
@@ -194,12 +184,12 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="address">Address</span>
+            <span>Address</span>
             <input type="text" id="fieldAddress" placeholder="Home address" />
           </label>
 
           <label class="field">
-            <span data-translate-key="phoneNumber">Phone number</span>
+            <span>Phone number</span>
             <input
               type="tel"
               id="fieldPhone"
@@ -208,9 +198,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="mothersPhone"
-              >Mother's phone number (if no phone)</span
-            >
+            <span>Mother's phone number (if no phone)</span>
             <input
               type="tel"
               id="fieldMotherPhone"
@@ -219,12 +207,12 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="schoolName">School name</span>
+            <span>School name</span>
             <input type="text" id="fieldSchool" placeholder="School name" />
           </label>
 
           <label class="field">
-            <span data-translate-key="talent">Talent or sport</span>
+            <span>Talent or sport</span>
             <input
               type="text"
               id="fieldTalent"
@@ -233,7 +221,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="fathersConfession">Father's confession</span>
+            <span>Father's confession</span>
             <select id="fieldFatherConfession">
               <option value="no">No</option>
               <option value="yes">Yes</option>
@@ -241,7 +229,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="inScout">In scout</span>
+            <span>In scout</span>
             <select id="fieldInScout">
               <option value="no">No</option>
               <option value="yes">Yes</option>
@@ -249,7 +237,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="fathersJob">Father's job</span>
+            <span>Father's job</span>
             <input
               type="text"
               id="fieldFatherJob"
@@ -258,7 +246,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="fathersPhone">Father's phone</span>
+            <span>Father's phone</span>
             <input
               type="tel"
               id="fieldFatherPhone"
@@ -267,9 +255,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="fathersFathersConfession"
-              >Father's father's confession</span
-            >
+            <span>Father's father's confession</span>
             <select id="fieldFatherFatherConfession">
               <option value="no">No</option>
               <option value="yes">Yes</option>
@@ -277,12 +263,12 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="church">Church</span>
+            <span>Church</span>
             <input type="text" id="fieldChurch" placeholder="Church name" />
           </label>
 
           <label class="field">
-            <span data-translate-key="mothersName">Mother's full name</span>
+            <span>Mother's full name</span>
             <input
               type="text"
               id="fieldMotherName"
@@ -291,7 +277,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="mothersJob">Mother's job</span>
+            <span>Mother's job</span>
             <input
               type="text"
               id="fieldMotherJob"
@@ -300,9 +286,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="mothersFathersConfession"
-              >Mother's father's confession</span
-            >
+            <span>Mother's father's confession</span>
             <select id="fieldMotherFatherConfession">
               <option value="no">No</option>
               <option value="yes">Yes</option>
@@ -310,7 +294,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="siblingsCount">Number of brothers/sisters</span>
+            <span>Number of brothers/sisters</span>
             <input
               type="number"
               id="fieldSiblingsCount"
@@ -320,7 +304,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="siblingsNames">Names of brothers/sisters</span>
+            <span>Names of brothers/sisters</span>
             <textarea
               id="fieldSiblingsNames"
               placeholder="One per line"
@@ -329,9 +313,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="siblingsDob"
-              >Date of birth of brothers/sisters</span
-            >
+            <span>Date of birth of brothers/sisters</span>
             <textarea
               id="fieldSiblingsDob"
               placeholder="One per line, matching names order"
@@ -340,7 +322,7 @@
           </label>
 
           <label class="field">
-            <span data-translate-key="notes">Important notes</span>
+            <span>Important notes</span>
             <textarea
               id="fieldNotes"
               placeholder="Any important notes..."
@@ -353,10 +335,10 @@
 
         <div class="modal-actions">
           <button type="button" id="cancelModalBtn" class="btn btn-ghost">
-            <span data-translate-key="cancel">Cancel</span>
+            Cancel
           </button>
           <button type="submit" id="saveChildBtn" class="btn btn-primary">
-            <span data-translate-key="saveChild">Save child</span>
+            Save child
           </button>
         </div>
       </form>
@@ -365,20 +347,15 @@
     <!-- ============ DELETE CONFIRM MODAL ============ -->
     <div id="deleteModalOverlay" class="modal-overlay hidden">
       <div class="modal-card modal-card--small">
-        <h2 data-translate-key="removeChild">Remove this child?</h2>
-        <p id="deleteModalText" data-translate-key="deleteWarning">
+        <h2>Remove this child?</h2>
+        <p id="deleteModalText">
           This will permanently delete their record and points.
         </p>
         <div class="modal-actions">
           <button type="button" id="cancelDeleteBtn" class="btn btn-ghost">
-            <span data-translate-key="cancel">Cancel</span>
+            Cancel
           </button>
-          <button
-            type="button"
-            id="confirmDeleteBtn"
-            class="btn btn-danger"
-            data-translate-key="delete"
-          >
+          <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
             Delete
           </button>
         </div>
@@ -430,7 +407,7 @@
               data-points="0"
               >0</span
             >
-            <span class="points-label points-label--large" data-translate-key="points">points</span>
+            <span class="points-label points-label--large">points</span>
           </div>
 
           <div class="point-controls point-controls--large">
@@ -489,14 +466,13 @@
                 <button
                   type="submit"
                   class="btn-point btn-point--custom btn-point--add btn-point--large"
-                  data-translate-key="add"
                 >
                   Add
                 </button>
                 <button
                   type="button"
                   class="btn-point btn-point--custom btn-point--remove btn-point--large"
-                  data-translate-key="remove"
+                  data-action="remove"
                 >
                   Remove
                 </button>
@@ -604,14 +580,13 @@
                 <button
                   type="submit"
                   class="btn-point btn-point--custom btn-point--add"
-                  data-translate-key="add"
                 >
                   Add
                 </button>
                 <button
                   type="button"
                   class="btn-point btn-point--custom btn-point--remove"
-                  data-translate-key="remove"
+                  data-action="remove"
                 >
                   Remove
                 </button>
