@@ -27,36 +27,46 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
 
 // vvvvvvvvvvvvvvvvvvvvvv  PASTE YOUR FIREBASE CONFIG HERE  vvvvvvvvvvvvvvvvvvvvvv
 export const firebaseConfig = {
-  apiKey: "AIzaSyD4ENSYFjyTA1N5gBleUMVTOJsP2i4EnmU", // ❗ PASTE YOUR FIREBASE API KEY HERE
+  apiKey: "AIzaSyD4ENSYFjyTA1N5gBleUMVTOJsP2i4EnmU",
   authDomain: "attendance-765b1.firebaseapp.com",
   projectId: "attendance-765b1",
   storageBucket: "attendance-765b1.firebasestorage.app",
   messagingSenderId: "533258210848",
   appId: "1:533258210848:web:7910c1636d4ed3f8573645",
-  measurementId: "G-LV64L0Y8SB",
+  measurementId: "G-LV64L0Y8SB"
 };
 
 // Initialize Firebase with error handling
 let app;
 let db;
 let childrenCollection;
-try {
-  app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  db = getFirestore(app);
-  childrenCollection = collection(db, "children");
-  console.log("Firebase initialized successfully");
-} catch (error) {
-  console.error("Firebase initialization error:", error);
-  // Show error on page
-  window.addEventListener("DOMContentLoaded", () => {
+
+function initializeFirebase() {
+  // Explicitly check for the placeholder API key. This is the root of the issue.
+  if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+    console.error("Firebase configuration is missing. Please update app.js");
     const errorEl = document.getElementById("configError");
     if (errorEl) {
       errorEl.classList.remove("hidden");
-      errorEl.querySelector("p").textContent =
-        "Firebase initialization failed: " + error.message;
+      const topbarEl = document.querySelector(".topbar");
+      if (topbarEl) {
+        topbarEl.classList.add("hidden");
+      }
+      const connectionStatusEl = document.getElementById("connectionStatus");
+      if (connectionStatusEl) {
+        connectionStatusEl.classList.add("hidden");
+      }
     }
-  });
+    // Stop the initialization process
+    return;
+  }
+
+  // If the key is not the placeholder, proceed with initialization.
+  app = initializeApp(firebaseConfig);
+  getAnalytics(app);
+  db = getFirestore(app);
+  childrenCollection = collection(db, "children");
+  console.log("Firebase initialized successfully");
 }
 
 // Global error handler
@@ -376,109 +386,35 @@ function applyLanguage(lang) {
 
 function updateTranslations() {
   const t = translations[currentLanguage];
+  if (!t) return;
 
-  // Update header
-  const brandTitle = document.querySelector(".brand-text h1");
-  const brandSubtitle = document.querySelector(".brand-text p");
-  if (brandTitle) brandTitle.textContent = t.brandTitle;
-  if (brandSubtitle) brandSubtitle.textContent = t.brandSubtitle;
+  // Update elements with data-translate-key
+  document.querySelectorAll("[data-translate-key]").forEach((el) => {
+    const key = el.dataset.translateKey;
+    if (t[key]) {
+      el.textContent = t[key];
+    }
+  });
 
-  // Update grade filter buttons
-  document.querySelector('.grade-filter-btn[data-grade="all"]')?.textContent =
-    t.all;
-  document.querySelector(
-    '.grade-filter-btn[data-grade="4th grade"]',
-  )?.textContent = t.fourth;
-  document.querySelector(
-    '.grade-filter-btn[data-grade="5th grade"]',
-  )?.textContent = t.fifth;
-  document.querySelector(
-    '.grade-filter-btn[data-grade="6th grade"]',
-  )?.textContent = t.sixth;
-
-  // Update search placeholder
-  if (searchInput) searchInput.placeholder = t.searchPlaceholder;
-
-  // Update empty state
-  const emptyH2 = document.querySelector("#emptyState h2");
-  const emptyP = document.querySelector("#emptyState p");
-  const emptyBtn = document.querySelector("#emptyStateAddBtn");
-  if (emptyH2) emptyH2.textContent = t.noStars;
-  if (emptyP) emptyP.textContent = t.addFirstChild;
-  if (emptyBtn) emptyBtn.textContent = t.addChildBtn;
-
-  // Update modal title
+  // Update dynamic elements
   if (modalTitle) {
     if (editingChildId) {
-      modalTitle.textContent = `${t.editTitle} ${fieldName.value}`;
-    } else {
-      modalTitle.textContent = t.addChildTitle;
+      modalTitle.textContent = `${t.editTitle} ${fieldName.value || ""}`;
     }
   }
-
-  // Update field labels
-  document.querySelector('label[for="fieldName"] span')?.textContent = t.name;
-  document.querySelector('label[for="fieldDob"] span')?.textContent =
-    t.dateOfBirth;
-  document.querySelector('label[for="fieldGrade"] span')?.textContent = t.grade;
-  document.querySelector('label[for="fieldAddress"] span')?.textContent =
-    t.address;
-  document.querySelector('label[for="fieldPhone"] span')?.textContent =
-    t.phoneNumber;
-  document.querySelector('label[for="fieldMotherPhone"] span')?.textContent =
-    t.mothersPhone;
-  document.querySelector('label[for="fieldSchool"] span')?.textContent =
-    t.schoolName;
-  document.querySelector('label[for="fieldTalent"] span')?.textContent =
-    t.talent;
-  document.querySelector(
-    'label[for="fieldFatherConfession"] span',
-  )?.textContent = t.fathersConfession;
-  document.querySelector('label[for="fieldInScout"] span')?.textContent =
-    t.inScout;
-  document.querySelector('label[for="fieldFatherJob"] span')?.textContent =
-    t.fathersJob;
-  document.querySelector('label[for="fieldFatherPhone"] span')?.textContent =
-    t.fathersPhone;
-  document.querySelector(
-    'label[for="fieldFatherFatherConfession"] span',
-  )?.textContent = t.fathersFathersConfession;
-  document.querySelector('label[for="fieldChurch"] span')?.textContent =
-    t.church;
-  document.querySelector('label[for="fieldMotherName"] span')?.textContent =
-    t.mothersName;
-  document.querySelector('label[for="fieldMotherJob"] span')?.textContent =
-    t.mothersJob;
-  document.querySelector(
-    'label[for="fieldMotherFatherConfession"] span',
-  )?.textContent = t.mothersFathersConfession;
-  document.querySelector('label[for="fieldSiblingsCount"] span')?.textContent =
-    t.siblingsCount;
-  document.querySelector('label[for="fieldSiblingsNames"] span')?.textContent =
-    t.siblingsNames;
-  document.querySelector('label[for="fieldSiblingsDob"] span')?.textContent =
-    t.siblingsDob;
-  document.querySelector('label[for="fieldNotes"] span')?.textContent = t.notes;
-
-  // Update buttons
-  const saveBtn = document.getElementById("saveChildBtn");
-  const cancelBtn = document.getElementById("cancelModalBtn");
-  if (saveBtn)
-    saveBtn.textContent = editingChildId ? t.saveChanges : t.saveChild;
-  if (cancelBtn) cancelBtn.textContent = t.cancel;
-
-  // Update delete modal
-  const deleteH2 = document.querySelector("#deleteModalOverlay h2");
-  const deleteP = document.querySelector("#deleteModalText");
-  if (deleteH2) deleteH2.textContent = t.removeChild;
-  if (deleteP) deleteP.textContent = t.deleteWarning;
-
-  // Update grade options
-  const gradeOptions = document.querySelectorAll("#fieldGrade option");
-  gradeOptions[0].textContent = t.selectGrade;
-  gradeOptions[1].textContent = "4th grade";
-  gradeOptions[2].textContent = "5th grade";
-  gradeOptions[3].textContent = "6th grade";
+  if (saveChildBtn) {
+    const saveChildSpan = saveChildBtn.querySelector("span");
+    if (saveChildSpan) {
+      saveChildSpan.textContent = editingChildId ? t.saveChanges : t.saveChild;
+    }
+  }
+  if (searchInput) {
+    searchInput.placeholder = t.searchPlaceholder;
+  }
+  const gradeOptions = document.querySelector("#fieldGrade option");
+  if (gradeOptions) {
+    gradeOptions.textContent = t.selectGrade;
+  }
 }
 
 function initLanguage() {
@@ -527,15 +463,9 @@ let searchQuery = "";
 let gradeFilter = "all";
 
 // Store all children data for sorting
-const childrenDataById = new Map();
-
-// Initialize theme and language after DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initLanguage();
-
-  // Set initial connection status
-  setConnectionStatus("connecting");
 
   // Set a timeout to show error if connection takes too long
   let connectionTimeout = setTimeout(() => {
@@ -543,6 +473,21 @@ document.addEventListener("DOMContentLoaded", () => {
       setConnectionStatus("error");
     }
   }, 10000); // 10 seconds timeout
+
+  try {
+    initializeFirebase();
+    // Start listener only if initialization was successful
+    if (db) {
+      startFirestoreListener();
+    } else {
+      // If db is not initialized (due to config error), clear the timeout
+      clearTimeout(connectionTimeout);
+    }
+  } catch (error) {
+    console.error("Firebase initialization error:", error);
+    setConnectionStatus("error", `Firebase init failed: ${error.message}`);
+    clearTimeout(connectionTimeout);
+  }
 
   // Theme toggle event handler
   if (themeToggleBtn) {
@@ -591,10 +536,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Set "All" as active by default
-  document
-    .querySelector('.grade-filter-btn[data-grade="all"]')
-    ?.classList.add("is-active");
-
+  const allFilterBtn = document.querySelector(
+    '.grade-filter-btn[data-grade="all"]',
+  );
+  if (allFilterBtn) {
+    allFilterBtn.classList.add("is-active");
+  }
   // Grade export button event handler
   if (gradeExportBtn) {
     gradeExportBtn.addEventListener("click", () => {
@@ -749,141 +696,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Card click event delegation
   if (childGrid) {
-    childGrid.addEventListener("click", (event) => {
-      const card = event.target.closest(".child-card");
-      if (!card) return;
-      const id = card.dataset.id;
-
-      // If clicking on the collapse button or outside the expanded content, close
-      if (event.target.closest(".collapse-btn")) {
-        toggleCardExpand(card, false);
-        return;
-      }
-
-      // If card is already expanded and clicking on the overlay background, close it
-      if (
-        card.classList.contains("is-expanded") &&
-        !event.target.closest(".child-details") &&
-        !event.target.closest(".point-controls") &&
-        !event.target.closest(".card-top-actions")
-      ) {
-        toggleCardExpand(card, false);
-        return;
-      }
-
-      const pointButton = event.target.closest(
-        ".btn-point:not(.btn-point--custom)",
-      );
-      if (pointButton) {
-        const amount = Number(pointButton.dataset.amount);
-        const action = pointButton.dataset.action || "add";
-        updateChildPoints(id, amount, action);
-        return;
-      }
-
-      const removeCustomBtn = event.target.closest(
-        ".btn-point--custom.btn-point--remove",
-      );
-      if (removeCustomBtn) {
-        const form = removeCustomBtn.closest(".custom-point-form");
-        const input = form?.querySelector(".custom-point-input");
-        const amount = Number(input?.value);
-        if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
-          input?.focus();
-          return;
-        }
-        updateChildPoints(id, amount, "remove");
-        input.value = "";
-        return;
-      }
-
-      // Expand/Collapse button
-      if (event.target.closest(".expand-btn")) {
-        toggleCardExpand(card, true);
-        return;
-      }
-
-      // Edit button: first expand the card to show all details, then open the edit modal
-      if (event.target.closest(".edit-btn")) {
-        // Expand the card first to show all details
-        if (!card.classList.contains("is-expanded")) {
-          toggleCardExpand(card, true);
-        }
-        // Then open the edit modal
-        openEditModal(id, {
-          name: card.dataset.name || "",
-          dob: card.dataset.dob || "",
-          grade: card.dataset.grade || "",
-          address: card.dataset.address || "",
-          phone: card.dataset.phone || "",
-          motherPhone: card.dataset.motherPhone || "",
-          school: card.dataset.school || "",
-          talent: card.dataset.talent || "",
-          fatherConfession: card.dataset.fatherConfession || "no",
-          inScout: card.dataset.inScout || "no",
-          fatherJob: card.dataset.fatherJob || "",
-          fatherPhone: card.dataset.fatherPhone || "",
-          fatherFatherConfession: card.dataset.fatherFatherConfession || "no",
-          church: card.dataset.church || "",
-          motherName: card.dataset.motherName || "",
-          motherJob: card.dataset.motherJob || "",
-          motherFatherConfession: card.dataset.motherFatherConfession || "no",
-          siblingsCount: card.dataset.siblingsCount || "",
-          siblingsNames: card.dataset.siblingsNames || "",
-          siblingsDob: card.dataset.siblingsDob || "",
-          notes: card.dataset.notes || "",
-        });
-        return;
-      }
-
-      // Delete button
-      if (event.target.closest(".delete-btn")) {
-        const name = card.querySelector(".child-name").textContent;
-        openDeleteModal(id, name);
-        return;
-      }
-
-      // Click on points display to open points modal
-      if (
-        event.target.closest(".points-display") &&
-        !card.classList.contains("is-expanded")
-      ) {
-        openPointsModal(id, {
-          name: card.dataset.name || "",
-          grade: card.dataset.grade || "",
-          points: lastKnownPointsById.get(id) || 0,
-        });
-        return;
-      }
-
-      // Click on card itself to expand (if not already expanded)
-      if (!card.classList.contains("is-expanded")) {
-        toggleCardExpand(card, true);
-      }
-    });
+    childGrid.addEventListener("click", handleGridClick);
 
     // Custom point amount form (submit via Enter key or the "Add" button)
-    childGrid.addEventListener("submit", (event) => {
-      const form = event.target.closest(".custom-point-form");
-      if (!form) return;
-      event.preventDefault();
-
-      const card = form.closest(".child-card");
-      const input = form.querySelector(".custom-point-input");
-      const amount = Number(input.value);
-
-      if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
-        input.focus();
-        return;
-      }
-
-      updateChildPoints(card.dataset.id, amount, "add");
-      input.value = "";
-    });
+    childGrid.addEventListener("submit", handleCustomPointSubmit);
   }
-
-  // Start Firestore listener after DOM is ready
-  startFirestoreListener();
 });
 
 // Async function to update child points
@@ -1207,24 +1024,19 @@ function applyCardData(card, data, { isNew = false } = {}) {
   card.dataset.name = data.name || "";
   card.dataset.dob = data.dob || "";
   card.dataset.grade = data.grade || "";
-  card.dataset.address = data.address || "";
-  card.dataset.phone = data.phone || "";
-  card.dataset.motherPhone = data.motherPhone || "";
-  card.dataset.school = data.school || "";
-  card.dataset.talent = data.talent || "";
-  card.dataset.fatherConfession = data.fatherConfession || "no";
-  card.dataset.inScout = data.inScout || "no";
-  card.dataset.fatherJob = data.fatherJob || "";
-  card.dataset.fatherPhone = data.fatherPhone || "";
-  card.dataset.fatherFatherConfession = data.fatherFatherConfession || "no";
-  card.dataset.church = data.church || "";
-  card.dataset.motherName = data.motherName || "";
-  card.dataset.motherJob = data.motherJob || "";
-  card.dataset.motherFatherConfession = data.motherFatherConfession || "no";
-  card.dataset.siblingsCount = data.siblingsCount || "";
-  card.dataset.siblingsNames = data.siblingsNames || "";
-  card.dataset.siblingsDob = data.siblingsDob || "";
-  card.dataset.notes = data.notes || "";
+
+  // Store all data on the dataset for the edit modal
+  for (const key in data) {
+    // Avoid storing objects or functions, only primitives
+    if (
+      typeof data[key] === "string" ||
+      typeof data[key] === "number" ||
+      typeof data[key] === "boolean"
+    ) {
+      // Convert camelCase to kebab-case for dataset attribute
+card.dataset[key] = String(data[key]);
+    }
+  }
 
   // Name / meta text
   const age = calculateAge(data.dob);
@@ -1232,24 +1044,14 @@ function applyCardData(card, data, { isNew = false } = {}) {
     data.name || "?",
   );
   // Update all .child-name elements (both collapsed and expanded views)
-  card
-    .querySelectorAll(".child-name")
-    .forEach((el) => (el.textContent = data.name || "Unnamed"));
+  card.querySelector(".child-name").textContent = data.name || "Unnamed";
   // Update all .child-grade elements (both collapsed and expanded views)
-  card
-    .querySelectorAll(".child-grade")
-    .forEach((el) => (el.textContent = data.grade || "No grade set"));
+  card.querySelector(".child-grade").textContent = data.grade || "No grade set";
   // Update all .child-meta elements (both collapsed and expanded views)
-  card
-    .querySelectorAll(".child-meta")
-    .forEach(
-      (el) =>
-        (el.textContent = `Age ${age ?? "?"} · Born ${formatDob(data.dob)}`),
-    );
+  card.querySelector(".child-meta").textContent =
+    `Age ${age ?? "?"} · Born ${formatDob(data.dob)}`;
   // Update all .rank-name elements (both collapsed and expanded views)
-  card
-    .querySelectorAll(".rank-name")
-    .forEach((el) => (el.textContent = tier.name));
+  card.querySelector(".rank-name").textContent = tier.name;
 
   // Update detail values
   card.querySelector(".child-address").textContent = data.address || "—";
@@ -1302,20 +1104,18 @@ function applyCardData(card, data, { isNew = false } = {}) {
   ringFill.style.stroke = tier.color;
 
   // Points number: animate from the last known value if this is an update
-  const pointsNumberEls = card.querySelectorAll(".points-number");
+  const pointsNumberEl = card.querySelector(".points-number");
   const pointsDisplayEl = card.querySelector(".points-display");
   const previousPoints = lastKnownPointsById.has(card.dataset.id)
     ? lastKnownPointsById.get(card.dataset.id)
     : points;
 
   if (isNew) {
-    pointsNumberEls.forEach((el) => (el.textContent = points));
+    pointsNumberEl.textContent = points;
   } else if (previousPoints !== points) {
     // Animate all points number elements
-    pointsNumberEls.forEach((el) => {
-      animateNumber(el, previousPoints, points);
-      replayAnimation(el, "is-popping", 450);
-    });
+    animateNumber(pointsNumberEl, previousPoints, points);
+    replayAnimation(pointsNumberEl, "is-popping", 450);
     spawnFloater(pointsDisplayEl, points - previousPoints);
   }
 
@@ -1344,14 +1144,14 @@ function sortCardsByPoints() {
   cards.forEach((card) => childGrid.appendChild(card));
 }
 
-function setConnectionStatus(state) {
+function setConnectionStatus(state, message = "") {
   connectionStatus.classList.remove("is-live", "is-error");
   if (state === "live") {
     connectionStatus.classList.add("is-live");
     connectionStatusText.textContent = "Live — syncing across all your devices";
   } else if (state === "error") {
     connectionStatus.classList.add("is-error");
-    connectionStatusText.textContent =
+    connectionStatusText.textContent = message ||
       "Couldn't connect — check your Firebase config";
   } else {
     connectionStatusText.textContent = "Connecting to live sync…";
@@ -1363,8 +1163,14 @@ function setConnectionStatus(state) {
    ========================================================================== */
 function openAddModal() {
   editingChildId = null;
-  modalTitle.textContent = "Add a child";
-  saveChildBtn.textContent = "Save child";
+  if (modalTitle) {
+    modalTitle.textContent = translations[currentLanguage].addChildTitle;
+  }
+  if (saveChildBtn) {
+    const saveChildSpan = saveChildBtn.querySelector("span");
+    if (saveChildSpan)
+      saveChildSpan.textContent = translations[currentLanguage].saveChild;
+  }
   childForm.reset();
   formError.classList.add("hidden");
   childModalOverlay.classList.remove("hidden");
@@ -1380,8 +1186,14 @@ function closeChildModal() {
 
 function openEditModal(id, data) {
   editingChildId = id;
-  modalTitle.textContent = `Edit ${data.name}`;
-  saveChildBtn.textContent = "Save changes";
+  if (modalTitle) {
+    modalTitle.textContent = `${translations[currentLanguage].editTitle} ${data.name}`;
+  }
+  if (saveChildBtn) {
+    const saveChildSpan = saveChildBtn.querySelector("span");
+    if (saveChildSpan)
+      saveChildSpan.textContent = translations[currentLanguage].saveChanges;
+  }
   fieldName.value = data.name || "";
   fieldDob.value = data.dob || "";
   fieldGrade.value = data.grade || "";
@@ -1431,6 +1243,97 @@ function closeDeleteModal() {
    and figure out which card + button was clicked.
    ========================================================================== */
 
+function handleGridClick(event) {
+  const card = event.target.closest(".child-card");
+  if (!card) return;
+
+  handlePointUpdate(event, card);
+  handleCardAction(event, card);
+}
+
+function handlePointUpdate(event, card) {
+  const id = card.dataset.id;
+
+  // Quick add/remove buttons
+  const pointButton = event.target.closest(".btn-point:not(.btn-point--custom)");
+  if (pointButton) {
+    const amount = Number(pointButton.dataset.amount);
+    const action = pointButton.dataset.action || "add";
+    updateChildPoints(id, amount, action);
+    return;
+  }
+
+  // Custom remove button
+  const removeCustomBtn = event.target.closest(
+    ".btn-point--custom.btn-point--remove",
+  );
+  if (removeCustomBtn) {
+    const form = removeCustomBtn.closest(".custom-point-form");
+    if (!form) return;
+    const input = form.querySelector(".custom-point-input");
+    if (!input) return;
+
+    const amount = Number(input.value);
+    if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+      input.focus();
+      return;
+    }
+    updateChildPoints(id, amount, "remove");
+    input.value = "";
+  }
+}
+
+function handleCardAction(event, card) {
+  const id = card.dataset.id;
+
+  // Expand/Collapse buttons
+  if (event.target.closest(".expand-btn")) {
+    toggleCardExpand(card, true);
+  } else if (event.target.closest(".collapse-btn")) {
+    toggleCardExpand(card, false);
+  }
+
+  // Edit button
+  else if (event.target.closest(".edit-btn")) {
+    const childData = { ...card.dataset }; // Get all data from dataset
+    openEditModal(id, childData);
+  }
+
+  // Delete button
+  else if (event.target.closest(".delete-btn")) {
+    const name = card.querySelector(".child-name").textContent;
+    openDeleteModal(id, name);
+  }
+
+  // Points display click
+  else if (event.target.closest(".points-display")) {
+    openPointsModal(id, {
+      name: card.dataset.name || "",
+      grade: card.dataset.grade || "",
+      points: lastKnownPointsById.get(id) || 0,
+    });
+  }
+}
+
+function handleCustomPointSubmit(event) {
+  const form = event.target.closest(".custom-point-form");
+  if (!form) return;
+  event.preventDefault();
+
+  const card = form.closest(".child-card");
+  if (!card) return;
+  const input = form.querySelector(".custom-point-input");
+  const amount = Number(input.value);
+
+  if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+    input.focus();
+    return;
+  }
+
+  updateChildPoints(card.dataset.id, amount, "add");
+  input.value = "";
+}
+
 /* ==========================================================================
    COLLAPSIBLE CARD LOGIC
    ========================================================================== */
@@ -1439,6 +1342,9 @@ let expandedCardId = null;
 
 function toggleCardExpand(card, expand) {
   const id = card.dataset.id;
+  const expandedContent = card.querySelector(".card-expanded");
+  const expandBtn = card.querySelector(".expand-btn");
+  const collapseBtn = card.querySelector(".collapse-btn");
 
   if (expand) {
     // If another card is expanded, collapse it first
@@ -1448,10 +1354,16 @@ function toggleCardExpand(card, expand) {
         toggleCardExpand(prevCard, false);
       }
     }
-    card.classList.add("is-expanded");
+    if (expandedContent) expandedContent.style.display = "block";
+    if (expandBtn) expandBtn.style.display = "none";
+    if (collapseBtn) collapseBtn.style.display = "block";
+    card.dataset.expanded = "true";
     expandedCardId = id;
   } else {
-    card.classList.remove("is-expanded");
+    if (expandedContent) expandedContent.style.display = "none";
+    if (expandBtn) expandBtn.style.display = "block";
+    if (collapseBtn) collapseBtn.style.display = "none";
+    card.dataset.expanded = "false";
     if (expandedCardId === id) {
       expandedCardId = null;
     }
@@ -1542,10 +1454,11 @@ if (pointsModalOverlay) {
     event.preventDefault();
 
     const input = form.querySelector(".custom-point-input--large");
-    const amount = Number(input?.value);
+    if (!input) return;
+    const amount = Number(input.value);
 
-    if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
-      input?.focus();
+    if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+      input.focus();
       return;
     }
 
@@ -1559,11 +1472,13 @@ if (pointsModalOverlay) {
     );
     if (removeCustomBtn && pointsModalChildId) {
       const form = removeCustomBtn.closest(".custom-point-form--large");
-      const input = form?.querySelector(".custom-point-input--large");
-      const amount = Number(input?.value);
+      if (!form) return;
+      const input = form.querySelector(".custom-point-input--large");
+      if (!input) return;
+      const amount = Number(input.value);
 
-      if (!input?.value.trim() || Number.isNaN(amount) || amount === 0) {
-        input?.focus();
+      if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+        input.focus();
         return;
       }
 
