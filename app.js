@@ -1597,6 +1597,99 @@ function handleCustomPointSubmit(event, card) {
   input.value = "";
 }
 
+function handleGridClick(event) {
+  const card = event.target.closest(".child-card");
+  if (!card) return;
+
+  handlePointUpdate(event, card);
+  handleCardAction(event, card);
+}
+
+function handlePointUpdate(event, card) {
+  const id = card.dataset.id;
+
+  // Quick add/remove buttons
+  const pointButton = event.target.closest(
+    ".btn-point:not(.btn-point--custom)",
+  );
+  if (pointButton) {
+    const amount = Number(pointButton.dataset.amount);
+    const action = pointButton.dataset.action || "add";
+    updateChildPoints(id, amount, action);
+    return;
+  }
+
+  // Custom remove button
+  const removeCustomBtn = event.target.closest(
+    ".btn-point--custom.btn-point--remove",
+  );
+  if (removeCustomBtn) {
+    const form = removeCustomBtn.closest(".custom-point-form");
+    if (!form) return; // Ensure form exists
+    const input = form.querySelector(".custom-point-input");
+    if (!input) return; // Ensure input exists
+
+    const amount = Number(input.value);
+    if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+      input.focus();
+      return;
+    }
+    updateChildPoints(id, amount, "remove");
+    input.value = "";
+  }
+}
+
+function handleCardAction(event, card) {
+  const id = card.dataset.id;
+
+  // Expand/Collapse buttons
+  if (event.target.closest(".expand-btn")) {
+    toggleCardExpand(card, true);
+  } else if (event.target.closest(".collapse-btn")) {
+    toggleCardExpand(card, false);
+  }
+
+  // Edit button
+  else if (event.target.closest(".edit-btn")) {
+    const childData = { ...card.dataset }; // Get all data from dataset
+    openEditModal(id, childData);
+  }
+
+  // Delete button
+  else if (event.target.closest(".delete-btn")) {
+    const name = card.querySelector(".child-name").textContent;
+    openDeleteModal(id, name);
+  }
+
+  // Points display click
+  else if (event.target.closest(".points-display")) {
+    openPointsModal(id, {
+      name: card.dataset.name || "",
+      grade: card.dataset.grade || "",
+      points: lastKnownPointsById.get(id) || 0,
+    });
+  }
+}
+
+function handleCustomPointSubmit(event) {
+  const form = event.target.closest(".custom-point-form");
+  if (!form) return;
+  event.preventDefault();
+
+  const card = form.closest(".child-card");
+  if (!card) return; // Ensure card exists
+  const input = form.querySelector(".custom-point-input");
+  if (!input) return; // Ensure input exists
+
+  if (!input.value.trim() || Number.isNaN(amount) || amount === 0) {
+    input.focus();
+    return;
+  }
+
+  updateChildPoints(card.dataset.id, amount, "add");
+  input.value = "";
+}
+
 /* ==========================================================================
    COLLAPSIBLE CARD LOGIC
    ========================================================================== */
