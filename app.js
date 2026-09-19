@@ -574,8 +574,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (db) {
       startFirestoreListener();
     } else {
-      // If db is not initialized (due to config error), clear the timeout
+      // Firebase didn't start (config problem). Clear the pending timeout and
+      // show the failure in the pill instead of leaving it on "Connecting…"
       clearTimeout(connectionTimeout);
+      setConnectionStatus(
+        "error",
+        "Firebase didn't start — check the config in app.js",
+      );
     }
   } catch (error) {
     console.error("Firebase initialization error:", error);

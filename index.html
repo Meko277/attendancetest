@@ -855,6 +855,25 @@
     <!-- Library for reading PDF sheets when importing -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 
+    <!--
+      Watchdog: app.js is an ES module. If it never runs at all (opened as a
+      local file:// page, the Firebase CDN blocked by an ad-blocker / network,
+      or a hard syntax crash), its own 10-second timeout can't fire and the
+      pill would sit on "Connecting to live sync…" forever. This plain script
+      always runs, so it speaks up when that happens.
+    -->
+    <script>
+      setTimeout(function () {
+        var pill = document.getElementById("connectionStatusText");
+        if (pill && pill.textContent.indexOf("Connecting") !== -1) {
+          pill.textContent =
+            "Can't start the app — check your internet / ad-blocker, or open the site via its https:// link";
+          var wrap = document.getElementById("connectionStatus");
+          if (wrap) wrap.classList.add("is-error");
+        }
+      }, 12000);
+    </script>
+
     <!-- ============ FIREBASE ============ -->
     <script type="module" src="app.js"></script>
   </body>
