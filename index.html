@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>St.George Church · Attendance & Reward Board</title>
+    <title>St.George Church · Attendance & Reward Board</title>
     <link rel="icon" type="image/png" href="assets/church_logo.png" />
 
     <!-- Google Fonts: Baloo 2 for playful display headings, Nunito for readable body text -->
@@ -36,8 +36,12 @@
 
       <!-- ============ HEADER ============ -->
       <header class="topbar">
-<div class="brand">
-          <img src="assets/church_logo.png" alt="Church Logo" class="brand-badge" />
+        <div class="brand">
+          <img
+            src="assets/church_logo.png"
+            alt="Church Logo"
+            class="brand-badge"
+          />
           <div class="brand-text">
             <h1>St.George Church</h1>
             <p>Attendance & reward board</p>
@@ -45,18 +49,66 @@
         </div>
 
         <div class="topbar-actions">
-<div class="grade-filter">
-            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="all">All</button>
-            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="4th grade">4th</button>
-            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="5th grade">5th</button>
-            <button type="button" class="btn btn-ghost grade-filter-btn" data-grade="6th grade">6th</button>
-          </div>
-<div class="grade-export hidden" id="gradeExportContainer">
-            <button type="button" class="btn btn-ghost grade-export-btn" id="gradeExportBtn" title="Export grade to file">
-              <span class="export-icon" aria-hidden="true">📊</span>
-              <span class="export-label">Export</span>
+          <div class="grade-filter">
+            <button
+              type="button"
+              class="btn btn-ghost grade-filter-btn"
+              data-grade="all"
+            >
+              All
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost grade-filter-btn"
+              data-grade="4th grade"
+            >
+              4th
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost grade-filter-btn"
+              data-grade="5th grade"
+            >
+              5th
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost grade-filter-btn"
+              data-grade="6th grade"
+            >
+              6th
             </button>
           </div>
+          <!-- Grade actions: Upgrade (only for grades that can move up) + Export -->
+          <div class="grade-actions hidden" id="gradeActionsContainer">
+            <button
+              type="button"
+              class="btn btn-ghost grade-upgrade-btn hidden"
+              id="gradeUpgradeBtn"
+              title="Move every child in this grade up to the next grade"
+            >
+              <span class="export-icon" aria-hidden="true">⬆️</span>
+              <span class="export-label" data-translate-key="upgrade">Upgrade</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost grade-export-btn"
+              id="gradeExportBtn"
+              title="Export grade to file"
+            >
+              <span class="export-icon" aria-hidden="true">📊</span>
+              <span class="export-label" data-translate-key="export">Export</span>
+            </button>
+          </div>
+          <button
+            type="button"
+            class="btn btn-ghost import-btn"
+            id="importBtn"
+            title="Import children from a PDF or Excel sheet"
+          >
+            <span class="export-icon" aria-hidden="true">📥</span>
+            <span class="export-label" data-translate-key="importFile">Import</span>
+          </button>
           <div class="search-container">
             <input
               type="text"
@@ -67,7 +119,7 @@
             />
             <span class="search-icon" aria-hidden="true">🔍</span>
           </div>
-<button
+          <button
             id="themeToggleBtn"
             class="btn btn-ghost theme-toggle"
             type="button"
@@ -123,11 +175,16 @@
     <div id="childModalOverlay" class="modal-overlay hidden">
       <form id="childForm" class="modal-card" novalidate>
         <h2 id="modalTitle">Add a child</h2>
-        
+
         <div class="modal-form-scroll">
           <label class="field">
             <span>Name</span>
-            <input type="text" id="fieldName" placeholder="e.g. Amira" required />
+            <input
+              type="text"
+              id="fieldName"
+              placeholder="e.g. Amira"
+              required
+            />
           </label>
 
           <label class="field">
@@ -152,12 +209,20 @@
 
           <label class="field">
             <span>Phone number</span>
-            <input type="tel" id="fieldPhone" placeholder="Child's phone number" />
+            <input
+              type="tel"
+              id="fieldPhone"
+              placeholder="Child's phone number"
+            />
           </label>
 
           <label class="field">
             <span>Mother's phone number (if no phone)</span>
-            <input type="tel" id="fieldMotherPhone" placeholder="Mother's phone" />
+            <input
+              type="tel"
+              id="fieldMotherPhone"
+              placeholder="Mother's phone"
+            />
           </label>
 
           <label class="field">
@@ -167,7 +232,11 @@
 
           <label class="field">
             <span>Talent or sport</span>
-            <input type="text" id="fieldTalent" placeholder="e.g. Football, Piano" />
+            <input
+              type="text"
+              id="fieldTalent"
+              placeholder="e.g. Football, Piano"
+            />
           </label>
 
           <label class="field">
@@ -188,12 +257,20 @@
 
           <label class="field">
             <span>Father's job</span>
-            <input type="text" id="fieldFatherJob" placeholder="Father's occupation" />
+            <input
+              type="text"
+              id="fieldFatherJob"
+              placeholder="Father's occupation"
+            />
           </label>
 
           <label class="field">
             <span>Father's phone</span>
-            <input type="tel" id="fieldFatherPhone" placeholder="Father's phone number" />
+            <input
+              type="tel"
+              id="fieldFatherPhone"
+              placeholder="Father's phone number"
+            />
           </label>
 
           <label class="field">
@@ -211,12 +288,20 @@
 
           <label class="field">
             <span>Mother's full name</span>
-            <input type="text" id="fieldMotherName" placeholder="Mother's full name" />
+            <input
+              type="text"
+              id="fieldMotherName"
+              placeholder="Mother's full name"
+            />
           </label>
 
           <label class="field">
             <span>Mother's job</span>
-            <input type="text" id="fieldMotherJob" placeholder="Mother's occupation" />
+            <input
+              type="text"
+              id="fieldMotherJob"
+              placeholder="Mother's occupation"
+            />
           </label>
 
           <label class="field">
@@ -229,22 +314,39 @@
 
           <label class="field">
             <span>Number of brothers/sisters</span>
-            <input type="number" id="fieldSiblingsCount" placeholder="0" min="0" />
+            <input
+              type="number"
+              id="fieldSiblingsCount"
+              placeholder="0"
+              min="0"
+            />
           </label>
 
           <label class="field">
             <span>Names of brothers/sisters</span>
-            <textarea id="fieldSiblingsNames" placeholder="One per line" rows="2"></textarea>
+            <textarea
+              id="fieldSiblingsNames"
+              placeholder="One per line"
+              rows="2"
+            ></textarea>
           </label>
 
           <label class="field">
             <span>Date of birth of brothers/sisters</span>
-            <textarea id="fieldSiblingsDob" placeholder="One per line, matching names order" rows="2"></textarea>
+            <textarea
+              id="fieldSiblingsDob"
+              placeholder="One per line, matching names order"
+              rows="2"
+            ></textarea>
           </label>
 
           <label class="field">
             <span>Important notes</span>
-            <textarea id="fieldNotes" placeholder="Any important notes..." rows="3"></textarea>
+            <textarea
+              id="fieldNotes"
+              placeholder="Any important notes..."
+              rows="3"
+            ></textarea>
           </label>
 
           <p id="formError" class="form-error hidden"></p>
@@ -279,47 +381,221 @@
       </div>
     </div>
 
+    <!-- ============ EXPORT MODAL ============ -->
+    <div id="exportModalOverlay" class="modal-overlay hidden">
+      <div class="modal-card modal-card--small">
+        <h2 data-translate-key="exportGrade">Export Grade</h2>
+        <p data-translate-key="exportFormat">Choose the export format for the selected grade.</p>
+        <div class="modal-actions" style="justify-content: center; gap: 12px">
+          <button type="button" id="exportPdfBtn" class="btn btn-primary">
+            Export as PDF
+          </button>
+          <button type="button" id="exportXlsxBtn" class="btn btn-primary">
+            Export as Excel
+          </button>
+        </div>
+        <button type="button" id="cancelExportBtn" class="btn btn-ghost" style="margin-top: 8px" data-translate-key="cancel">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- ============ IMPORT MODAL ============ -->
+    <div id="importModalOverlay" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h2 data-translate-key="importTitle">Import children</h2>
+        <p class="modal-hint" data-translate-key="importHint">
+          Choose a PDF, Excel or CSV file. Columns are matched automatically
+          (name, grade, date of birth, ...) and every child is sorted into the
+          right grade for you.
+        </p>
+
+        <label class="field">
+          <span data-translate-key="importFileLabel"
+            >File (PDF / Excel / CSV)</span
+          >
+          <input
+            type="file"
+            id="importFileInput"
+            accept=".xlsx,.xls,.csv,.pdf,application/pdf"
+          />
+        </label>
+
+        <label class="field">
+          <span data-translate-key="importGradeLabel"
+            >Grade to use when the file has none</span
+          >
+          <select id="importGradeSelect">
+            <option value="" data-translate-key="importGradeNone">
+              Keep the grade from the file
+            </option>
+            <option value="4th grade">4th grade</option>
+            <option value="5th grade">5th grade</option>
+            <option value="6th grade">6th grade</option>
+          </select>
+        </label>
+
+        <p id="importStatus" class="import-status" role="status"></p>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            id="cancelImportBtn"
+            class="btn btn-ghost"
+            data-translate-key="close"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ UPGRADE MODAL ============ -->
+    <div id="upgradeModalOverlay" class="modal-overlay hidden">
+      <div class="modal-card modal-card--small">
+        <h2 data-translate-key="upgradeTitle">Upgrade grade</h2>
+        <p id="upgradeModalText"></p>
+        <label class="field field--checkbox">
+          <input type="checkbox" id="upgradeResetPoints" />
+          <span data-translate-key="upgradeResetPoints"
+            >Also reset their points to 0</span
+          >
+        </label>
+        <div class="modal-actions">
+          <button
+            type="button"
+            id="cancelUpgradeBtn"
+            class="btn btn-ghost"
+            data-translate-key="cancel"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="confirmUpgradeBtn"
+            class="btn btn-primary"
+            data-translate-key="confirmUpgrade"
+          >
+            Upgrade
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Toast notification for quick feedback (e.g. "Points added!") -->
     <div id="toast" class="toast hidden"></div>
 
     <!-- ============ POINTS EDIT MODAL ============ -->
     <div id="pointsModalOverlay" class="modal-overlay hidden">
       <div class="modal-card points-modal-card">
-        <button type="button" id="closePointsModalBtn" class="btn btn-ghost points-modal-close" title="Close">
+        <button
+          type="button"
+          id="closePointsModalBtn"
+          class="btn btn-ghost points-modal-close"
+          title="Close"
+        >
           ✕
         </button>
         <div class="points-modal-content">
           <div class="points-modal-avatar">
-            <svg class="ring ring--large" viewBox="0 0 120 120" aria-hidden="true">
+            <svg
+              class="ring ring--large"
+              viewBox="0 0 120 120"
+              aria-hidden="true"
+            >
               <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
-              <circle class="ring-fill ring-fill--large" cx="60" cy="60" r="52"></circle>
+              <circle
+                class="ring-fill ring-fill--large"
+                cx="60"
+                cy="60"
+                r="52"
+              ></circle>
             </svg>
-            <div class="avatar avatar--large"><span class="avatar-initials avatar-initials--large"></span></div>
+            <div class="avatar avatar--large">
+              <span class="avatar-initials avatar-initials--large"></span>
+            </div>
             <div class="rank-badge rank-badge--large" title=""></div>
           </div>
           <h2 id="pointsModalName" class="points-modal-name"></h2>
           <p id="pointsModalGrade" class="points-modal-grade"></p>
           <p id="pointsModalRank" class="points-modal-rank"></p>
-          
+
           <div class="points-display points-display--large">
-            <span id="pointsModalValue" class="points-number points-number--large" data-points="0">0</span>
+            <span
+              id="pointsModalValue"
+              class="points-number points-number--large"
+              data-points="0"
+              >0</span
+            >
             <span class="points-label points-label--large">points</span>
           </div>
-          
+
           <div class="point-controls point-controls--large">
             <div class="quick-buttons quick-buttons--large">
-              <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="5">−5</button>
-              <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="10">−10</button>
-              <button class="btn-point btn-point--remove btn-point--large" data-action="remove" data-amount="50">−50</button>
-              <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="5">+5</button>
-              <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="10">+10</button>
-              <button class="btn-point btn-point--add btn-point--large" data-action="add" data-amount="50">+50</button>
+              <button
+                class="btn-point btn-point--remove btn-point--large"
+                data-action="remove"
+                data-amount="5"
+              >
+                −5
+              </button>
+              <button
+                class="btn-point btn-point--remove btn-point--large"
+                data-action="remove"
+                data-amount="10"
+              >
+                −10
+              </button>
+              <button
+                class="btn-point btn-point--remove btn-point--large"
+                data-action="remove"
+                data-amount="50"
+              >
+                −50
+              </button>
+              <button
+                class="btn-point btn-point--add btn-point--large"
+                data-action="add"
+                data-amount="5"
+              >
+                +5
+              </button>
+              <button
+                class="btn-point btn-point--add btn-point--large"
+                data-action="add"
+                data-amount="10"
+              >
+                +10
+              </button>
+              <button
+                class="btn-point btn-point--add btn-point--large"
+                data-action="add"
+                data-amount="50"
+              >
+                +50
+              </button>
             </div>
             <form class="custom-point-form custom-point-form--large">
-              <input type="number" class="custom-point-input custom-point-input--large" placeholder="Custom amount" aria-label="Custom point amount" />
+              <input
+                type="number"
+                class="custom-point-input custom-point-input--large"
+                placeholder="Custom amount"
+                aria-label="Custom point amount"
+              />
               <div class="custom-point-actions custom-point-actions--large">
-                <button type="submit" class="btn-point btn-point--custom btn-point--add btn-point--large">Add</button>
-                <button type="button" class="btn-point btn-point--custom btn-point--remove btn-point--large" data-action="remove">Remove</button>
+                <button
+                  type="submit"
+                  class="btn-point btn-point--custom btn-point--add btn-point--large"
+                >
+                  Add
+                </button>
+                <button
+                  type="button"
+                  class="btn-point btn-point--custom btn-point--remove btn-point--large"
+                  data-action="remove"
+                >
+                  Remove
+                </button>
               </div>
             </form>
           </div>
@@ -356,209 +632,230 @@
           <div class="rank-badge" title=""></div>
         </div>
 
-        <!-- Collapsed view: only shows when card is collapsed -->
-        <div class="card-collapsed">
-          <h3 class="child-name"></h3>
-          <p class="child-grade"></p>
-          <p class="child-meta"></p>
-          <p class="rank-name"></p>
+        <h3 class="child-name"></h3>
+        <p class="child-grade"></p>
+        <p class="child-meta"></p>
+        <p class="rank-name"></p>
 
-          <div class="points-display">
-            <span class="points-number" data-points="0">0</span>
-            <span class="points-label">points</span>
-          </div>
-          
-          <button class="btn btn-ghost expand-btn" type="button">
-            Show details
-          </button>
+        <div class="points-display">
+          <span class="points-number" data-points="0">0</span>
+          <span class="points-label" data-translate-key="points">points</span>
         </div>
 
-<!-- Expanded view: shows all details and controls -->
+        <div class="point-controls">
+          <div class="quick-buttons">
+            <button
+              class="btn-point btn-point--remove"
+              data-action="remove"
+              data-amount="5"
+            >
+              −5
+            </button>
+            <button
+              class="btn-point btn-point--remove"
+              data-action="remove"
+              data-amount="10"
+            >
+              −10
+            </button>
+            <button
+              class="btn-point btn-point--remove"
+              data-action="remove"
+              data-amount="50"
+            >
+              −50
+            </button>
+            <button
+              class="btn-point btn-point--add"
+              data-action="add"
+              data-amount="5"
+            >
+              +5
+            </button>
+            <button
+              class="btn-point btn-point--add"
+              data-action="add"
+              data-amount="10"
+            >
+              +10
+            </button>
+            <button
+              class="btn-point btn-point--add"
+              data-action="add"
+              data-amount="50"
+            >
+              +50
+            </button>
+          </div>
+          <form class="custom-point-form">
+            <input
+              type="number"
+              class="custom-point-input"
+              placeholder="Custom amount"
+              aria-label="Custom point amount"
+            />
+            <div class="custom-point-actions">
+              <button
+                type="submit"
+                class="btn-point btn-point--custom btn-point--add"
+              >
+                Add
+              </button>
+              <button
+                type="button"
+                class="btn-point btn-point--custom btn-point--remove"
+                data-action="remove"
+              >
+                Remove
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- This section is toggled by JS -->
         <div class="card-expanded">
-          <div class="card-top-actions">
-            <button
-              class="icon-btn edit-btn"
-              title="Edit child"
-              aria-label="Edit child"
-            >
-              ✎
-            </button>
-            <button
-              class="icon-btn delete-btn"
-              title="Delete child"
-              aria-label="Delete child"
-            >
-              🗑
-            </button>
-          </div>
-          
-          <button class="btn btn-ghost collapse-btn" type="button">
-            Hide details
-          </button>
-          
-          <h3 class="child-name"></h3>
-          <p class="child-grade"></p>
-          <p class="child-meta"></p>
-          <p class="rank-name"></p>
-
-          <div class="points-display">
-            <span class="points-number" data-points="0">0</span>
-            <span class="points-label">points</span>
-          </div>
-          
-          <div class="child-details">
-            <div class="detail-row">
-              <span class="detail-label">Address:</span>
-              <span class="detail-value child-address"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Phone:</span>
-              <span class="detail-value child-phone"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">School:</span>
-              <span class="detail-value child-school"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Talent/Sport:</span>
-              <span class="detail-value child-talent"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Father's confession:</span>
-              <span class="detail-value child-father-confession"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">In Scout:</span>
-              <span class="detail-value child-in-scout"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Father's job:</span>
-              <span class="detail-value child-father-job"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Father's phone:</span>
-              <span class="detail-value child-father-phone"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Father's father's confession:</span>
-              <span class="detail-value child-father-father-confession"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Church:</span>
-              <span class="detail-value child-church"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Mother's name:</span>
-              <span class="detail-value child-mother-name"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Mother's phone:</span>
-              <span class="detail-value child-mother-phone"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Mother's job:</span>
-              <span class="detail-value child-mother-job"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Mother's father's confession:</span>
-              <span class="detail-value child-mother-father-confession"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Siblings:</span>
-              <span class="detail-value child-siblings"></span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Notes:</span>
-              <span class="detail-value child-notes"></span>
-            </div>
-          </div>
-
-          <div class="point-controls">
-            <div class="quick-buttons">
-              <button
-                class="btn-point btn-point--remove"
-                data-action="remove"
-                data-amount="5"
-              >
-                −5
-              </button>
-              <button
-                class="btn-point btn-point--remove"
-                data-action="remove"
-                data-amount="10"
-              >
-                −10
-              </button>
-              <button
-                class="btn-point btn-point--remove"
-                data-action="remove"
-                data-amount="50"
-              >
-                −50
-              </button>
-              <button
-                class="btn-point btn-point--add"
-                data-action="add"
-                data-amount="5"
-              >
-                +5
-              </button>
-              <button
-                class="btn-point btn-point--add"
-                data-action="add"
-                data-amount="10"
-              >
-                +10
-              </button>
-              <button
-                class="btn-point btn-point--add"
-                data-action="add"
-                data-amount="50"
-              >
-                +50
-              </button>
-            </div>
-            <form class="custom-point-form">
-              <input
-                type="number"
-                class="custom-point-input"
-                placeholder="Custom amount"
-                aria-label="Custom point amount"
-              />
-              <div class="custom-point-actions">
-                <button
-                  type="submit"
-                  class="btn-point btn-point--custom btn-point--add"
+          <div class="card-expanded-content">
+            <div class="child-details">
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="addressLabel"
+                  >Address:</span
                 >
-                  Add
-                </button>
-                <button
-                  type="button"
-                  class="btn-point btn-point--custom btn-point--remove"
-                  data-action="remove"
-                >
-                  Remove
-                </button>
+                <span class="detail-value child-address"></span>
               </div>
-            </form>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="phoneLabel"
+                  >Phone:</span
+                >
+                <span class="detail-value child-phone"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="schoolLabel"
+                  >School:</span
+                >
+                <span class="detail-value child-school"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="talentLabel"
+                  >Talent/Sport:</span
+                >
+                <span class="detail-value child-talent"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="fathersConfessionLabel"
+                  >Father's confession:</span
+                >
+                <span class="detail-value child-father-confession"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="inScoutLabel"
+                  >In Scout:</span
+                >
+                <span class="detail-value child-in-scout"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="fathersJobLabel"
+                  >Father's job:</span
+                >
+                <span class="detail-value child-father-job"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="fathersPhoneLabel"
+                  >Father's phone:</span
+                >
+                <span class="detail-value child-father-phone"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="fathersFathersConfessionLabel"
+                  >Father's father's confession:</span
+                >
+                <span
+                  class="detail-value child-father-father-confession"
+                ></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="churchLabel"
+                  >Church:</span
+                >
+                <span class="detail-value child-church"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="mothersNameLabel"
+                  >Mother's name:</span
+                >
+                <span class="detail-value child-mother-name"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="mothersPhoneLabel"
+                  >Mother's phone:</span
+                >
+                <span class="detail-value child-mother-phone"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="mothersJobLabel"
+                  >Mother's job:</span
+                >
+                <span class="detail-value child-mother-job"></span>
+              </div>
+              <div class="detail-row">
+                <span
+                  class="detail-label"
+                  data-translate-key="mothersFathersConfessionLabel"
+                  >Mother's father's confession:</span
+                >
+                <span
+                  class="detail-value child-mother-father-confession"
+                ></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="siblingsLabel"
+                  >Siblings:</span
+                >
+                <span class="detail-value child-siblings"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label" data-translate-key="notesLabel"
+                  >Notes:</span
+                >
+                <span class="detail-value child-notes"></span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <button
+          class="btn btn-ghost expand-btn"
+          type="button"
+          style="display: block"
+          data-translate-key="showDetails"
+        >
+          Show details
+        </button>
+        <button
+          class="btn btn-ghost collapse-btn"
+          type="button"
+          style="display: none"
+          data-translate-key="hideDetails"
+        >
+          Hide details
+        </button>
       </article>
     </template>
 
-    <!-- ============ FIREBASE ============ -->
-    <script type="module">
-      import { firebaseConfig } from "./app.js";
-      if (firebaseConfig.apiKey === "YOUR_API_KEY") {
-        const errorEl = document.getElementById("configError");
-        if (errorEl) errorEl.classList.remove("hidden");
+    <!-- Library for Excel export / import -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-        document.querySelector(".topbar").classList.add("hidden");
-        document.getElementById("connectionStatus").classList.add("hidden");
-        document.getElementById("childGrid").classList.add("hidden");
-        document.getElementById("emptyState").classList.add("hidden");
-      }
-    </script>
+    <!-- Library for reading PDF sheets when importing -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+
+    <!-- ============ FIREBASE ============ -->
     <script type="module" src="app.js"></script>
   </body>
 </html>
